@@ -18,38 +18,38 @@ module.exports = function () {
     /*----------Empresa-----------*/
     /* GET obtener todas las empresas */
     router.get("/empresa",
-        auth, 
+        // auth, 
         EmpresasController.getEmpresa);
 
     /* POST crear una empresa */
     router.post("/empresa",
-        auth, 
+        // auth, 
         EmpresasController.postEmpresa);
 
     /* Patch edita el status de una empresa */
     router.patch("/empresa",
-        auth, 
+        // auth, 
         EmpresasController.patchEmpresa);
 
     /*----------Vacante-----------*/
     /* GET obtener todas las vacantes */
     router.get("/vacante",
-        auth, 
+        // auth, 
         VacantesController.getVacante);
 
     /* GET obtiene el archivo PDF de esa vacante */
     router.get("/vacante/:id",
-        auth, 
+        // auth, 
         VacantesController.getVacantePdf);
 
     /* POST crear una vacante */
     router.post("/vacante",
-        auth, 
+        // auth, 
         VacantesController.postVacante);
 
     /* Patch edita el status de una vacante */
     router.patch("/vacante",
-        auth, 
+        // auth, 
         VacantesController.patchVacante);
 
     return router

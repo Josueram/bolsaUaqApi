@@ -9,22 +9,14 @@ const Empresas = db.define('empresas',{
         autoIncrement: true
     },
     nombreEmpresa: Sequelize.STRING(32),
-    password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        validate: {
-            notEmpty:{
-                msg:'La contraseña no puede ir vacia'
-            }
-        }
-    },
+    password: {type: Sequelize.STRING,allowNull: true,},
     descripcion:{type: Sequelize.STRING(32), allowNull:false},
     ciudad: {type: Sequelize.STRING(32), allowNull:false},
     rfc: {type: Sequelize.STRING(32), allowNull:false},
     giro: {type: Sequelize.STRING(32), allowNull:false},
     razonSocial: {type: Sequelize.STRING(32), allowNull:false},
     email: {type: Sequelize.STRING(32), allowNull:false},
-    telefono: {type: Sequelize.STRING(32), allowNull:false},
+    telefonoEmpresa: {type: Sequelize.STRING(32), allowNull:false},
     sitioWeb: {type: Sequelize.STRING(32), allowNull:false},
     fechaRegistro: {type: Sequelize.DATEONLY,allowNull: true, defaultValue: Sequelize.NOW},
     direccion: {type: Sequelize.STRING(32), allowNull:false},
@@ -40,7 +32,7 @@ const Empresas = db.define('empresas',{
 
 Empresas.hasMany(Vacantes, {
     foreignKey: {
-        name: 'vacanteId',
+        name: 'empresaId',
         allowNull: true
     }
 })

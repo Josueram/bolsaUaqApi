@@ -10,30 +10,24 @@ exports.login = async (req,res,next) => {
 
 /* Regresa todas las empresas */
 exports.getEmpresa = async (req,res,next) => {
-
+    console.log("get empresa")
     try {
         const empresas = await Empresas.findAll();
 
-        return res.status(200).json({ message: trabajadorData }); 
+        return res.status(200).json({ message: empresas }); 
     } catch (error) {
-        return res
-        .status(401)
-        .json({ message: "Error al obtener las empresas" }); 
+        return res.status(401).json({ message: "Error al obtener las empresas" }); 
     }
 }
 
 /* Crea una empresa */
 exports.postEmpresa = async (req,res,next) => {
-    const data = req.body.data;
-
+    const data = req.body;
+    console.log(data)
     try {
-       const calificacion_asignada = await MateriasCursadas.create(data)
+       const empresa = await Empresas.create(data)
     
-       await MateriasEnCurso.destroy({
-         where:{alumnoId:alumnoExpediente,materiasPlanEstudiosId:materiasPlanEstudiosId}
-       })
-       
-       return res.status(200).json({ message: calificacion_asignada });
+       return res.status(200).json({ message: "Solicitud enviada correctamente" });
     
       } catch (error) {
         return res.status(401).json({ message: error });

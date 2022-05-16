@@ -21,11 +21,29 @@ exports.getVacantePdf = async (req,res,next) => {
 
 /* Crea una vacante */
 exports.postVacante = async (req,res,next) => {
-    const data = req.body.data;
+    const data = req.body;
+    console.log(data)
+    try {
+       const vacante = await Vacantes.create(data)
+    
+       return res.status(200).json({ message:  "Solicitud de vacante enviada" });
+      } catch (error) {
+        return res.status(401).json({ message: error });
+      }
 
 }
 
 /* Cambia el status de una vacante, cualquier int diferente de 0,1,2 regresa error */
 exports.patchVacante = async (req,res,next) => {
-    // return 
+    const data = req.body;
+
+    try {
+       const vacante = await Vacantes.findOne({where:{idVacante:data.idVacante}})
+       vacante.status = data.status
+       await vacante.save()
+    
+       return res.status(200).json({ message: `${vacante.nombreVacante} editada correctamente` });
+      } catch (error) {
+        return res.status(401).json({ message: error });
+      }
 }
