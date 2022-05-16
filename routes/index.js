@@ -14,7 +14,7 @@ module.exports = function () {
     router.post("/loginEmpresa", EmpresasController.login);
     /* login trabajador */
     router.post("/loginVinculador", (req,res,next)=>{
-        if(req.body.usuario==="ADMIN" && req.body.password==="ADMIN"){
+        if(req.body.data.usuario==="ADMIN" && req.body.data.password==="ADMIN"){
             const token = jwt.sign(
                 {
                     "token":"ADMIN",
@@ -23,7 +23,7 @@ module.exports = function () {
                 );
                 return res.status(200).json({ message: token });
         }else{
-            return res.status(200).json({ message: "Datos incorrectos" });
+            return res.status(401).json({ message: "Datos incorrectos" });
         }
     });
   
