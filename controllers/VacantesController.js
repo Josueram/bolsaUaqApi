@@ -2,9 +2,23 @@
 const Vacantes = require("../models/Vacantes");
 
 /* Regresa todas las vacantes */
-exports.getVacante = async (req,res,next) => {
+exports.getVacantes = async (req,res,next) => {
     try {
         const vacantes = await Vacantes.findAll();
+        // TODO que tambien regrese el nombre de la empresa
+        return res.status(200).json({ message: vacantes });
+    } catch (error) {
+        return res
+        .status(401)
+        .json({ message: "Error al obtener las vacantes" }); 
+    }
+}
+
+/* Regresa las vacantes de la empresa logeada */
+exports.getVacante = async (req,res,next) => {
+    const {empresaId} = req.user
+    try {
+        const vacantes = await Vacantes.findAll({where:{empresaId}});
         // TODO que tambien regrese el nombre de la empresa
         return res.status(200).json({ message: vacantes });
     } catch (error) {

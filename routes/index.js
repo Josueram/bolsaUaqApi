@@ -48,13 +48,17 @@ module.exports = function () {
 
     /*----------Vacante-----------*/
     /* GET obtener todas las vacantes */
-    router.get("/vacante",
+    router.get("/vacantes",
         auth, 
         isAdmin,
+        VacantesController.getVacantes);
+    /* GET obtiene las vacantes de la empresa logeada*/
+    router.get("/vacante",
+        auth, 
         VacantesController.getVacante);
 
     /* GET obtiene el archivo PDF de esa vacante */
-    router.get("/vacante/:id",
+    router.get("/vacantePdf/:id",
         auth, 
         isAdmin,
         VacantesController.getVacantePdf);
