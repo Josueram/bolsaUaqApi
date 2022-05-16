@@ -7,18 +7,17 @@ const Empresas = require("../models/Empresas");
 exports.login = async (req,res,next) => {
     const { usuario, password } = req.body;
 
-  const alumno = await Empresas.findOne({ where: { usuario: usuario,password:password,status:1} });
+    const empresa = await Empresas.findOne({ where: { usuario: usuario,password:password,status:1} });
 
-  if(!alumno) return  res.status(401).json({ msg: "Usuario o contraseña incorrecto" })
+    if(!empresa) return  res.status(401).json({ msg: "Usuario o contraseña incorrecto" })
   
-//   const token = jwt.sign(
-//     {
-//       "expediente":alumno.expediente,
-//     },
-//     'debugkey'
-//   );
-//   return res.status(200).json({ message: token });
-    return res.status(200).json({ message: "Inicio de sesion exitoso" });
+    const token = jwt.sign(
+    {
+        "empresaId":empresa.empresaId,
+    },
+    'debugkey'
+    );
+    return res.status(200).json({ message: token });
 }
 
 /* Regresa todas las empresas */
@@ -49,5 +48,6 @@ exports.postEmpresa = async (req,res,next) => {
 
 /* Cambia el status de una empresa, cualquier int diferente de 0,1,2 regresa error */
 exports.patchEmpresa = async (req,res,next) => {
-    // return 
+
+ 
 }
