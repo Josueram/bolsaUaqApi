@@ -35,7 +35,7 @@ exports.getVacantePdf = async (req,res,next) => {
 
 /* Crea una vacante */
 exports.postVacante = async (req,res,next) => {
-    const data = req.body;
+    const data = req.body.data;
     console.log(data)
     try {
        const vacante = await Vacantes.create(data)
@@ -50,7 +50,7 @@ exports.postVacante = async (req,res,next) => {
 /* Cambia el status de una vacante, cualquier int diferente de 0,1,2 regresa error */
 exports.patchVacante = async (req,res,next) => {
     // const {empresaId} = req.user;
-    const {status,empresaId} = req.body
+    const {status,empresaId} = req.body.data
     if(status===0 || status===1 || status===2){
         try {
            const vacante = await Vacantes.findOne({where:{empresaId}})

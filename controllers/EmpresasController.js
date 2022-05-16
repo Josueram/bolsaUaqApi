@@ -5,7 +5,8 @@ const Empresas = require("../models/Empresas");
 
 
 exports.login = async (req,res,next) => {
-    const { usuario, password } = req.body;
+    console.log(req.body.data)
+    const { usuario, password } = req.body.data;
 
     const empresa = await Empresas.findOne({ where: { usuario: usuario,password:password,status:1} });
 
@@ -34,7 +35,7 @@ exports.getEmpresa = async (req,res,next) => {
 
 /* Crea una empresa */
 exports.postEmpresa = async (req,res,next) => {
-    const data = req.body;
+    const data = req.body.data;
     console.log(data)
     try {
        const empresa = await Empresas.create(data)
@@ -48,7 +49,7 @@ exports.postEmpresa = async (req,res,next) => {
 
 /* Cambia el status de una empresa, cualquier int diferente de 0,1,2 regresa error */
 exports.patchEmpresa = async (req,res,next) => {
-    const {status,empresaId} = req.body
+    const {status,empresaId} = req.body.data
     if(status===0 || status===1 || status===2){
         try {
            const empresa = await Empresas.findOne({where:{empresaId}})

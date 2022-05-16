@@ -1,5 +1,4 @@
 const express = require('express')
-const cors = require('cors')
 const routes = require('./routes')
 const db = require('./config/db')
 require('./models/Empresas')
@@ -11,6 +10,7 @@ db.sync()
 
 const app = express()  
 
+const cors = require('cors')
 app.use(cors())
 
 app.use(express.json());
