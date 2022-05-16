@@ -9,7 +9,7 @@ const Empresas = db.define('empresas',{
         autoIncrement: true
     },
     nombreEmpresa: Sequelize.STRING(32),
-    password: {type: Sequelize.STRING,allowNull: true,},
+    password: {type: Sequelize.STRING(32),allowNull: true,},
     descripcion:{type: Sequelize.STRING(32), allowNull:false},
     ciudad: {type: Sequelize.STRING(32), allowNull:false},
     rfc: {type: Sequelize.STRING(32), allowNull:false},
@@ -27,6 +27,7 @@ const Empresas = db.define('empresas',{
     nombreReclutador: {type: Sequelize.STRING(32), allowNull:false},
     emailReclutador: {type: Sequelize.STRING(32), allowNull:false},
     telefonoReclutador:{type: Sequelize.STRING(32), allowNull:false},
+    usuario:{type: Sequelize.STRING(32), allowNull:false},
     status:{type: Sequelize.INTEGER(1),allowNull: true, defaultValue: 0},
 })
 

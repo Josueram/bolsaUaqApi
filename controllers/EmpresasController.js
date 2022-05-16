@@ -5,7 +5,20 @@ const Empresas = require("../models/Empresas");
 
 
 exports.login = async (req,res,next) => {
-    // return 
+    const { usuario, password } = req.body;
+
+  const alumno = await Empresas.findOne({ where: { usuario: usuario,password:password,status:1} });
+
+  if(!alumno) return  res.status(401).json({ msg: "Usuario o contraseña incorrecto" })
+  
+//   const token = jwt.sign(
+//     {
+//       "expediente":alumno.expediente,
+//     },
+//     'debugkey'
+//   );
+//   return res.status(200).json({ message: token });
+    return res.status(200).json({ message: "Inicio de sesion exitoso" });
 }
 
 /* Regresa todas las empresas */

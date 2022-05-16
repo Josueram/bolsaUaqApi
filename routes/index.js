@@ -12,7 +12,11 @@ module.exports = function () {
     router.post("/loginEmpresa", EmpresasController.login);
     /* login trabajador */
     router.post("/loginVinculador", (req,res,next)=>{
-
+        if(req.body.usuario==="ADMIN" && req.body.password==="ADMIN"){
+            return res.status(200).json({ message: "Inicio de sesion exitoso" });
+        }else{
+            return res.status(200).json({ message: "Datos incorrectos" });
+        }
     });
   
     /*----------Empresa-----------*/
