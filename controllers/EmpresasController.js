@@ -35,7 +35,7 @@ exports.getEmpresa = async (req,res,next) => {
 
 /* Crea una empresa */
 exports.postEmpresa = async (req,res,next) => {
-    const data = req.body.data;
+    const data = req.body.form;
     console.log(data)
     try {
        const empresa = await Empresas.create(data)

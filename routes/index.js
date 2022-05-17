@@ -36,8 +36,6 @@ module.exports = function () {
 
     /* POST crear una empresa */
     router.post("/empresa",
-        auth,
-        isAdmin, 
         EmpresasController.postEmpresa);
 
     /* Patch edita el status de una empresa */
