@@ -35,7 +35,9 @@ exports.getVacantePdf = async (req,res,next) => {
 
 /* Crea una vacante */
 exports.postVacante = async (req,res,next) => {
-    const data = req.body.data;
+    let data = req.body.form;
+    const {empresaId} = req.user
+    data.empresaId = empresaId
     console.log(data)
     try {
        const vacante = await Vacantes.create(data)
@@ -47,9 +49,28 @@ exports.postVacante = async (req,res,next) => {
 
 }
 
+/* Edita la vacante */
+exports.putVacante = async (req,res,next) => {
+    console.log("SOY PUT")
+    const {empresaId} = req.user;
+    let data = req.body.form
+    data.status = 2
+    try {
+       const vacante = await Vacantes.findOne({where:{empresaId}})
+       vacante.set(data)
+       await vacante.save()
+    
+       return res.status(200).json({ message: `${vacante.nombreVacante} editada correctamente` });
+      } catch (error) {
+        return res.status(401).json({ message: error });
+    }
+    
+}
+
 /* Cambia el status de una vacante, cualquier int diferente de 0,1,2 regresa error */
 exports.patchVacante = async (req,res,next) => {
     // const {empresaId} = req.user;
+    console.log("SOY PATCH")
     const {status,empresaId} = req.body.data
     if(status===0 || status===1 || status===2){
         try {
@@ -65,3 +86,4 @@ exports.patchVacante = async (req,res,next) => {
         return res.status(200).json({ message: "Datos incorrectos" });
     }
 }
+

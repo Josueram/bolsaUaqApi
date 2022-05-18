@@ -64,14 +64,18 @@ module.exports = function () {
     /* POST crear una vacante */
     router.post("/vacante",
         auth, 
-        isAdmin,
         VacantesController.postVacante);
 
-    /* Patch edita el status de una vacante */
+    /* PATCH edita el status de una vacante */
     router.patch("/vacante",
         auth, 
         isAdmin,
         VacantesController.patchVacante);
+
+    /* PUT edita una vacante*/
+    router.put("/vacante",
+        auth, 
+        VacantesController.putVacante);
 
     return router
 }

@@ -28,7 +28,7 @@ const Empresas = db.define('empresas',{
     emailReclutador: {type: Sequelize.STRING(32), allowNull:false},
     telefonoReclutador:{type: Sequelize.STRING(32), allowNull:false},
     usuario:{type: Sequelize.STRING(32), allowNull:false},
-    status:{type: Sequelize.INTEGER(1),allowNull: true, defaultValue: 0},
+    status:{type: Sequelize.INTEGER(1),allowNull: true, defaultValue: 2},
 })
 
 Empresas.hasMany(Vacantes, {
