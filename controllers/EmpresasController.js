@@ -8,7 +8,7 @@ exports.login = async (req,res,next) => {
     console.log(req.body.data)
     const { usuario, password } = req.body.data;
 
-    const empresa = await Empresas.findOne({ where: { usuario: usuario,password:password,status:1} });
+    const empresa = await Empresas.findOne({ where: { usuario: usuario,password:password,status:0} });
 
     if(!empresa) return  res.status(401).json({ msg: "Usuario o contraseña incorrecto" })
   

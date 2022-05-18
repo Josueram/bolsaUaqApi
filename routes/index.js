@@ -67,15 +67,20 @@ module.exports = function () {
         VacantesController.postVacante);
 
     /* PATCH edita el status de una vacante */
-    router.patch("/vacante",
+    router.patch("/vacantes",
         auth, 
         isAdmin,
-        VacantesController.patchVacante);
+        VacantesController.patchVacantes);
 
     /* PUT edita una vacante*/
     router.put("/vacante",
         auth, 
         VacantesController.putVacante);
+
+    /* PATCH edita la disponibilidad de una vacante*/
+    router.patch("/vacante",
+        auth, 
+        VacantesController.patchVacante);
 
     return router
 }
