@@ -62,26 +62,28 @@ exports.putVacante = async (req,res,next) => {
     
        return res.status(200).json({ message: `${vacante.nombreVacante} editada correctamente` });
       } catch (error) {
-        return res.status(401).json({ message: error });
+        return res.status(400).json({ message: error });
     }
     
 }
 
 /* Cambia el status de una vacante, cualquier int diferente de 0,1,2 regresa error */
 exports.patchVacantes = async (req,res,next) => {
-    const {status,empresaId} = req.body.data
+    const {status,id} = req.body.data
     if(status===0 || status===1 || status===2){
         try {
-           const vacante = await Vacantes.findOne({where:{empresaId}})
-           vacante.status = status
-           await vacante.save()
+            console.log("statuuuuuuuus: ", id)
+            const vacante = await Vacantes.findOne({where:{vacanteId:id}})
+            vacante.status =  status
+            await vacante.save()
         
            return res.status(200).json({ message: `${vacante.nombreVacante} editada correctamente` });
           } catch (error) {
-            return res.status(401).json({ message: error });
+              console.log(error)
+            return res.status(400).json({ message: error });
         }
     }else{
-        return res.status(200).json({ message: "Datos incorrectos" });
+        return res.status(400).json({ message: "Datos incorrectos" });
     }
 }
 
@@ -106,6 +108,6 @@ exports.patchVacante = async (req,res,next) => {
             return res.status(400).json({ message: "Algo salio mal" });
         }
     }else{
-        return res.status(401).json({ message: "No cuentas con los permisos necesarios" });
+        return res.status(400).json({ message: "No cuentas con los permisos necesarios" });
     }
 }

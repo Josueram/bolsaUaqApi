@@ -49,19 +49,21 @@ exports.postEmpresa = async (req,res,next) => {
 
 /* Cambia el status de una empresa, cualquier int diferente de 0,1,2 regresa error */
 exports.patchEmpresa = async (req,res,next) => {
-    const {status,empresaId} = req.body.data
+    const {status,id} = req.body.data
+    console.log(req.body.data)
     if(status===0 || status===1 || status===2){
         try {
-           const empresa = await Empresas.findOne({where:{empresaId}})
+           const empresa = await Empresas.findOne({where:{empresaId:id}})
            empresa.status = status
            await empresa.save()
         
            return res.status(200).json({ message: `${empresa.nombreEmpresa} editada correctamente` });
           } catch (error) {
-            return res.status(401).json({ message: error });
+              console.log(error)
+            return res.status(400).json({ message: error });
         }
     }else{
-        return res.status(200).json({ message: "Datos incorrectos" });
+        return res.status(400).json({ message: "Datos incorrectos" });
     }
  
 }
