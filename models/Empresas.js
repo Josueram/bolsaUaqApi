@@ -12,6 +12,7 @@ const Empresas = db.define('empresas',{
     password: {type: Sequelize.STRING(32),allowNull: true,},
     descripcion:{type: Sequelize.STRING(32), allowNull:false},
     ciudad: {type: Sequelize.STRING(32), allowNull:false},
+    logo: {type: Sequelize.STRING, allowNull:false},
     rfc: {type: Sequelize.STRING(32), allowNull:false},
     giro: {type: Sequelize.STRING(32), allowNull:false},
     razonSocial: {type: Sequelize.STRING(32), allowNull:false},
@@ -31,11 +32,17 @@ const Empresas = db.define('empresas',{
     status:{type: Sequelize.INTEGER(1),allowNull: true, defaultValue: 2},
 })
 
-Empresas.hasMany(Vacantes, {
+// Empresas.hasMany(Vacantes, {
+//     foreignKey: {
+//         name: 'empresaId',
+//         allowNull: true
+//     }
+// })
+Vacantes.belongsTo(Empresas, {
     foreignKey: {
         name: 'empresaId',
         allowNull: true
     }
-})
+});
 
 module.exports = Empresas

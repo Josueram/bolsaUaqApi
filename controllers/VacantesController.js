@@ -1,15 +1,20 @@
 //Models
 const Vacantes = require("../models/Vacantes");
+const Empresas = require("../models/Empresas");
 
 /* Regresa todas las vacantes */
 exports.getVacantes = async (req,res,next) => {
     try {
-        const vacantes = await Vacantes.findAll();
+        const vacantes = await Vacantes.findAll(
+            // {include: [{ model: Empresas, as: 'empresa', attributes: ['nombreEmpresa'] }]}
+            {include: [{ model: Empresas, attributes: ['nombreEmpresa']}]}
+        );
         // TODO que tambien regrese el nombre de la empresa
         return res.status(200).json({ message: vacantes });
     } catch (error) {
+    console.log(error)
         return res
-        .status(401)
+        .status(400)
         .json({ message: "Error al obtener las vacantes" }); 
     }
 }
