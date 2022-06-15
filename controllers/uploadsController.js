@@ -1,4 +1,3 @@
-const { response } = require("express");
 const { imagesService } = require("../services/");
 
 const getImage = (req, res) => {
