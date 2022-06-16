@@ -34,15 +34,25 @@ module.exports = function () {
         isAdmin, 
         EmpresasController.getEmpresa);
 
+    /* GET obtiene la informacion de una empresa */
+    router.get("/empresaInfo",
+        auth,
+        EmpresasController.getEmpresaInfo);
+
     /* POST crear una empresa */
     router.post("/empresa",
         EmpresasController.postEmpresa);
 
-    /* Patch edita el status de una empresa */
+    /* PATCH edita el status de una empresa */
     router.patch("/empresa",
         auth,
         isAdmin, 
         EmpresasController.patchEmpresa);
+    
+    /* PUT edita una empresa */
+    router.put("/empresa",
+        auth,
+        EmpresasController.putEmpresa);
 
     /*----------Vacante-----------*/
     /* GET obtener todas las vacantes */
