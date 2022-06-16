@@ -1,27 +1,21 @@
-const express = require('express')
-const routes = require('./routes')
-const db = require('./config/db')
-require('./models/Empresas')
-require('./models/Vacantes')
+require("dotenv").config();
+const express = require('express');
+const cors = require('cors');
+const { db } = require('./config');
+const mainRouter = require("./mainRouter");
 
 db.sync()
     .then(() => console.log('DB connected'))
-    .catch(error => console.log(error))
+    .catch(console.log);
 
-const app = express()
+const app = express();
 
-const cors = require('cors')
-app.use(cors())
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/', routes())
-
-
-app.use("/uploads", require("./routes/uploadsRoute"));  // a través de aquí se solicitan las imágenes
-
+app.use('/api', mainRouter) // Main router
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log('Server is running on port 3000');
+    console.log(`Server is running on port ${process.env.PORT || 3000}.`);
 });

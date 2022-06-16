@@ -1,9 +1,9 @@
 const Sequelize = require('sequelize')
-const db = require('../config/db');
+const { db } = require('../config/');
 
-const Vacantes = db.define('vacantes',{
+const Vacantes = db.define('vacantes', {
     vacanteId: {
-        type:Sequelize.INTEGER,
+        type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
@@ -27,11 +27,9 @@ const Vacantes = db.define('vacantes',{
     otrosRequisitos:{type: Sequelize.STRING(32), allowNull:false},
     fechaRegistro: {type: Sequelize.DATEONLY,allowNull: true, defaultValue: Sequelize.NOW},
     // 0 aceptada,1 rechazada, 2 pendiente
-    status:{type: Sequelize.INTEGER(1),allowNull: true, defaultValue: 2},
+    status: { type: Sequelize.INTEGER(1), allowNull: true, defaultValue: 2 },
     // 0 disponible, 1 ocupada
-    isDisponible:{type: Sequelize.INTEGER(1),allowNull: true, defaultValue: 0},
-})
+    isDisponible: { type: Sequelize.INTEGER(1), allowNull: true, defaultValue: 0 },
+});
 
-
-
-module.exports = Vacantes
+module.exports = Vacantes;

@@ -1,24 +1,31 @@
-const jwt = require("jsonwebtoken");
-
 //Models
-const Empresas = require("../models/Empresas");
+const { Empresas } = require("../models/");
 
+/* Regresa los datos de la empresa actual */
+exports.datosEmpresa = async (req, res, next) => {
+    try {
+        const { empresaId } = req.currentUser;
+        console.log(req.currentUser)
+        const empresa = await Empresas.findOne({ where: { empresaId: empresaId } });
 
-exports.login = async (req,res,next) => {
-    console.log(req.body.data)
-    const { usuario, password } = req.body.data;
+        if (!empresa) {
+            return res.status(404).json({
+                ok: false,
+                message: "La empresa no está disponible o fue eliminada.",
+            });
+        }
 
-    const empresa = await Empresas.findOne({ where: { usuario: usuario,password:password,status:0} });
-
-    if(!empresa) return  res.status(401).json({ msg: "Usuario o contraseña incorrecto" })
-  
-    const token = jwt.sign(
-    {
-        "empresaId":empresa.empresaId,
-    },
-    'debugkey'
-    );
-    return res.status(200).json({ message: token });
+        return res.status(200).json({
+            ok: true,
+            message: "",
+            data: empresa
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            message: "Error al cargar los datos de la empresa.",
+        });
+    }
 }
 
 /* Regresa todas las empresas */
@@ -50,37 +57,64 @@ exports.getEmpresaInfo = async (req,res,next) => {
     }
 }
 
-/* Crea una empresa */
-exports.postEmpresa = async (req,res,next) => {
-    const data = req.body.form;
-    console.log(data)
+/* REgistrar una empresa para aprobación */
+exports.registerEmpresa = async (req, res, next) => {
+    const data = req.body;
     try {
-       const empresa = await Empresas.create(data)
-    
-       return res.status(200).json({ message: "Solicitud enviada correctamente" });
-    
-      } catch (error) {
-        return res.status(401).json({ message: error });
-      }
+        const empresa = await Empresas.create(data)
+
+        return res.status(200).json({
+            ok: true,
+            message: "Solicitud enviada correctamente y en espera de aprobación."
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            message: error
+        });
+    }
 }
 
 /* Cambia el status de una empresa, cualquier int diferente de 0,1,2 regresa error */
-exports.patchEmpresa = async (req,res,next) => {
-    const {status,id} = req.body.data
-    console.log(req.body.data)
-    if(status===0 || status===1 || status===2){
-        try {
-           const empresa = await Empresas.findOne({where:{empresaId:id}})
-           empresa.status = status
-           await empresa.save()
-        
-           return res.status(200).json({ message: `${empresa.nombreEmpresa} editada correctamente` });
-          } catch (error) {
-              console.log(error)
-            return res.status(400).json({ message: error });
+exports.changeStatus = async (req, res, next) => {
+    const { status, id } = req.params;
+
+    const statusId = parseInt(status);
+
+    const validStatus = [0, 1, 2];
+    if (!validStatus.some(x => x === statusId)) {
+        return res.status(400).json({
+            ok: false,
+            message: "Estatus no válido."
+        });
+    }
+
+    try {
+        const empresa = await Empresas.findOne({ where: { empresaId: id } });
+
+        if (!empresa) {
+            return res.status(404).json({
+                ok: false,
+                message: "No se encuentra la empresa o ha sido eliminada.",
+                data: empresa
+            });
         }
-    }else{
-        return res.status(400).json({ message: "Datos incorrectos" });
+
+        empresa.status = statusId;
+        await empresa.save()
+
+        return res.status(200).json({
+            ok: true,
+            message: "Estatus de la empresa actualizada correctamente.",
+            data: empresa
+        });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({
+            ok: false,
+            message: error
+        });
     }
 
 }

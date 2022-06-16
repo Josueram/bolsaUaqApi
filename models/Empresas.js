@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize')
-const db = require('../config/db')
+const { db } = require('../config/')
 const Vacantes = require('./Vacantes')
 
-const Empresas = db.define('empresas',{
+const Empresas = db.define('empresas', {
     empresaId: {
-        type:Sequelize.INTEGER,
+        type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
@@ -45,4 +45,4 @@ Vacantes.belongsTo(Empresas, {
     }
 });
 
-module.exports = Empresas
+module.exports = Empresas;
