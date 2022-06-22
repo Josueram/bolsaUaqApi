@@ -1,13 +1,13 @@
 //Models
 const { Empresas } = require("../models/");
 
+const { imagesService } = require("../services/");
+
 /* Regresa los datos de la empresa actual */
 exports.datosEmpresa = async (req, res, next) => {
     try {
-        const { empresaId } = req.currentUser;
-        console.log(req.currentUser)
+        const  empresaId  = req.user;
         const empresa = await Empresas.findOne({ where: { empresaId: empresaId } });
-
         if (!empresa) {
             return res.status(404).json({
                 ok: false,
@@ -17,7 +17,7 @@ exports.datosEmpresa = async (req, res, next) => {
 
         return res.status(200).json({
             ok: true,
-            message: "",
+            message: empresa,
             data: empresa
         });
     } catch (error) {
@@ -29,7 +29,7 @@ exports.datosEmpresa = async (req, res, next) => {
 }
 
 /* Regresa todas las empresas */
-exports.getEmpresa = async (req,res,next) => {
+exports.getEmpresas = async (req,res,next) => {
     try {
         const empresas = await Empresas.findAll({
             order:[
@@ -57,10 +57,22 @@ exports.getEmpresaInfo = async (req,res,next) => {
     }
 }
 
-/* REgistrar una empresa para aprobación */
+/* Registrar una empresa para aprobación */
 exports.registerEmpresa = async (req, res, next) => {
     const data = req.body;
     try {
+        // La imagen se sube
+        const response = await imagesService.uploadImage(req.files?.logo);
+        // Algo esta mal con la imagen
+        if (!response.ok) {
+            return res.status(400).json({
+                ok: false,
+                message: response.message,
+            });
+        }
+        // Todo esta bien con la imagen y se le asigna ese path a la BD
+        data.logo = response.data
+        // Se guarda la empresa en la BD
         const empresa = await Empresas.create(data)
 
         return res.status(200).json({
@@ -76,9 +88,9 @@ exports.registerEmpresa = async (req, res, next) => {
     }
 }
 
-/* Cambia el status de una empresa, cualquier int diferente de 0,1,2 regresa error */
+/* Cambia el status de una empresa,asigna contraseña y usuario en caso de que el status sea 0 (aceptada)( cualquier int diferente de 0,1,2 regresa error9 */
 exports.changeStatus = async (req, res, next) => {
-    const { status, id } = req.params;
+    const { status, id,password,usuario } = req.body.data;
 
     const statusId = parseInt(status);
 
@@ -99,6 +111,11 @@ exports.changeStatus = async (req, res, next) => {
                 message: "No se encuentra la empresa o ha sido eliminada.",
                 data: empresa
             });
+        }
+        if(status==0){
+            empresa.usuario = usuario;
+            empresa.password = password;
+
         }
 
         empresa.status = statusId;

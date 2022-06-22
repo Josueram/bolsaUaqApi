@@ -3,9 +3,8 @@ const { Empresas } = require("../models/");
 const { generateJwt } = require("../helpers");
 
 const loginEmpresa = async (req, res, next) => {
-	const { usuario, password } = req.body;
-
-	const empresa = await Empresas.findOne({ where: { usuario: usuario, password: password } });
+	const { usuario, password } = req.body.data;
+	const empresa = await Empresas.findOne({ where: { usuario: usuario, password: password, status:0 } });
 
 
 	if (!empresa) {
@@ -15,40 +14,39 @@ const loginEmpresa = async (req, res, next) => {
 		});
 	}
 
-	if (empresa.status !== 1) {
-		return res.status(500).json({
-			ok: false,
-			message: "La empresa no ha sido aprobada y no puede iniciar sesión."
-		});
-	}
 
-	const token = await generateJwt({
-		type: "USER",
-		empresaId: empresa.empresaId
-	});
+	// const token = await generateJwt({
+	// 	type: "USER",
+	// 	empresaId: empresa.empresaId
+	// });
+	const token = jwt.sign(
+		{
+		  "user":empresa.empresaId,
+		},
+		'debugkey'
+	  );
 
 	return res.status(200).json({
 		ok: true,
-		message: "Has iniciado sesión correcamente.",
-		data: { token }
+		message: token,
 	});
 }
 
 const loginVinculador = async (req, res, next) => {
 
-	const { usuario, password } = req.body;
-
+	const { usuario, password } = req.body.data;
 	if (usuario === "ADMIN" && password === "ADMIN") {
 
-		const token = await generateJwt({
-			type: "ADMIN",
-			userId: 0
-		});
+		const token = jwt.sign(
+			{
+			  "user":"ADMIN",
+			},
+			'debugkey'
+		  );
 
 		return res.status(200).json({
 			ok: true,
-			message: "Has iniciado sesión correctamente.",
-			data: { token }
+			message: token,
 		});
 
 	} else {

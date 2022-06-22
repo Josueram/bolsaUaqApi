@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const db = new Sequelize('portalUaq', 'root', 'secret', {
+const db = new Sequelize('portalUaq', 'root', '', {
     host: 'localhost',
     dialect: 'mysql',
     port: 3306,

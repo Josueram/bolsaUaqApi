@@ -4,7 +4,7 @@
  */
 
 const { Router } = require("express");
-const expressFileUpload = require('express-fileupload');
+// const expressFileUpload = require('express-fileupload');
 
 // Routes
 const {
@@ -16,7 +16,7 @@ const {
 } = require("./routes");
 
 const router = Router();
-router.use(expressFileUpload());
+// router.use(expressFileUpload());
 
 router.use("/auth", authRoute);
 router.use("/empresa", empresaRoute);

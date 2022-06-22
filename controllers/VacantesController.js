@@ -60,13 +60,10 @@ exports.getVacanteById = async (req, res, next) => {
 /* Regresa las vacantes de la empresa logeada */
 exports.vacantesEmpresa = async (req, res, next) => {
     try {
-        const { empresaId } = req.currentUser;
+        const empresaId  = req.user;
         const vacantes = await Vacantes.findAll({ where: { empresaId } });
         // TODO que tambien regrese el nombre de la empresa
-        return res.status(200).json({
-            ok: true,
-            data: vacantes
-        });
+        return res.status(200).json({ message: vacantes });
     } catch (error) {
         console.log(error)
         return res.status(500).json({
@@ -84,7 +81,7 @@ exports.getVacantePdf = async (req, res, next) => {
 /* Crea una vacante */
 exports.createVacante = async (req, res, next) => {
     const data = req.body;
-    const { empresaId } = req.currentUser;
+    const { empresaId } = req.user;
 
     data.status = 0;
     data.empresaId = empresaId;
@@ -108,10 +105,11 @@ exports.createVacante = async (req, res, next) => {
 
 /* Edita la vacante */
 exports.editVacante = async (req, res, next) => {
-    const { empresaId } = req.currentUser;
-    const { id } = req.params;
-    const data = req.body;
-    delete (data.status); // Elimina el status para que no se edique
+    // const { empresaId } = req.user;
+    // const { id } = req.params;
+    // const data = req.body;
+    // delete (data.status); // Elimina el status para que no se edique
+    console.log(req.user)
     // data.status = 2
     try {
         const vacante = await Vacantes.findOne({ where: { vacanteId: id, empresaId } });
@@ -143,7 +141,7 @@ exports.editVacante = async (req, res, next) => {
 /* Cambia el status de una vacante, cualquier int diferente de 0,1,2 regresa error */
 exports.changeStatusVacante = async (req, res, next) => {
     const { status, id } = req.params;
-    const { empresaId } = req.currentUser;
+    const { empresaId } = req.user;
     const statusId = parseInt(status);
     const validStatus = [0, 1, 2];
 
@@ -185,7 +183,7 @@ exports.changeStatusVacante = async (req, res, next) => {
 /* Cambia la disponibilidad de una vacante, cualquier int diferente de 0,1 regresa error (solo la misma empresa puede realizar esta accion)*/
 exports.changeAvailableVacante = async (req, res, next) => {
     const { status, id } = req.params;
-    const { empresaId } = req.currentUser;
+    const { empresaId } = req.user;
     const statusId = parseInt(status);
     const validStatus = [0, 1];
 
