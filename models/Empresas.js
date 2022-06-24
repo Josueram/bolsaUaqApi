@@ -28,7 +28,7 @@ const Empresas = db.define('empresas', {
     nombreReclutador: {type: Sequelize.STRING(32), allowNull:false},
     emailReclutador: {type: Sequelize.STRING(32), allowNull:false},
     telefonoReclutador:{type: Sequelize.STRING(32), allowNull:false},
-    usuario:{type: Sequelize.STRING(32), allowNull:false},
+    usuario:{type: Sequelize.STRING(32), allowNull:true},
     status:{type: Sequelize.INTEGER(1),allowNull: true, defaultValue: 2},
 })
 
