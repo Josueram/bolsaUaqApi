@@ -1,5 +1,6 @@
 //Models
 const { Empresas, Vacantes } = require("../models/");
+const { pdfService } = require("../services/");
 
 /* Regresa todas las vacantes */
 exports.getVacantes = async (req, res, next) => {
@@ -11,9 +12,9 @@ exports.getVacantes = async (req, res, next) => {
             // // order:[
             // //     ['empresas','ASC']
             // // ]
-            include: [{ model: Empresas, attributes: ['nombreEmpresa']}],
-            order:[
-                [{model: Empresas,}, 'nombreEmpresa', 'ASC']
+            include: [{ model: Empresas, attributes: ['nombreEmpresa'] }],
+            order: [
+                [{ model: Empresas, }, 'nombreEmpresa', 'ASC']
             ]
         });
         return res.status(200).json({ message: vacantes });
@@ -60,7 +61,7 @@ exports.getVacanteById = async (req, res, next) => {
 /* Regresa las vacantes de la empresa logeada */
 exports.vacantesEmpresa = async (req, res, next) => {
     try {
-        const empresaId  = req.user;
+        const empresaId = req.user;
         const vacantes = await Vacantes.findAll({ where: { empresaId } });
         // TODO que tambien regrese el nombre de la empresa
         return res.status(200).json({ message: vacantes });
@@ -75,7 +76,37 @@ exports.vacantesEmpresa = async (req, res, next) => {
 
 /* Regresa el archivo PDF */
 exports.getVacantePdf = async (req, res, next) => {
-    // return 
+    const { id } = req.params;
+
+    try {
+        const vacante = await Vacantes.findOne(
+            // {include: [{ model: Empresas, as: 'empresa', attributes: ['nombreEmpresa'] }]}
+            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['nombreEmpresa'] }] }
+        );
+
+        if (!vacante) {
+            return res.status(404).json({
+                ok: false,
+                message: "No se encuentra la vacante o se ha eliminado."
+            });
+        }
+
+        const stream = res.writeHead(200, {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': 'attachment;filename=Vacantes.pdf'
+        });
+        pdfService.buildPDF(
+            (chunk) => stream.write(chunk),
+            () => stream.end(),
+            vacante
+        )
+        res.json({ ok: true, vacante });
+    } catch (error) {
+        console.log(error)
+        return res
+            .status(500)
+            .json({ message: "Error al generar PDF" });
+    }
 }
 
 /* Crea una vacante */

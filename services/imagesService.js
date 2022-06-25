@@ -72,7 +72,7 @@ const getImage = (fileName) => {
 	// imagen por defecto
 	if (!fs.existsSync(pathImg)) {
 		// Si no existe la imagen, se cambia a una por defecto
-		pathImg = path.join(__dirname, "../uploads/no-img.png");
+		pathImg = path.join(__dirname, "../uploads/no-image.jpg");
 	}
 
 	return {
