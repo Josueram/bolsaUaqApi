@@ -138,9 +138,9 @@ exports.changeStatus = async (req, res, next) => {
 
 /*Edita la información de una empresa */
 exports.putEmpresa = async (req,res,next) => {
-    const data = req.body.form
-    const {empresaId} = req.user
     try{
+        const data = req.body.form
+        const empresaId = req.user
         const empresa = await Empresas.findOne({where:{empresaId:empresaId}})
         empresa.set(data)
         await empresa.save()

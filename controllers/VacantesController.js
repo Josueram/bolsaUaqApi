@@ -111,10 +111,10 @@ exports.getVacantePdf = async (req, res, next) => {
 
 /* Crea una vacante */
 exports.createVacante = async (req, res, next) => {
-    const data = req.body;
-    const { empresaId } = req.user;
-
-    data.status = 0;
+    let data = req.body.form;
+    const  empresaId  = req.user;
+    // console.log(data)
+    // data.status = 0;
     data.empresaId = empresaId;
 
     try {
@@ -126,6 +126,7 @@ exports.createVacante = async (req, res, next) => {
             data: vacante
         });
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             ok: false,
             message: error
@@ -136,9 +137,9 @@ exports.createVacante = async (req, res, next) => {
 
 /* Edita la vacante */
 exports.editVacante = async (req, res, next) => {
-    // const { empresaId } = req.user;
-    // const { id } = req.params;
-    // const data = req.body;
+    const  empresaId  = req.user;
+    const { id } = req.params;
+    const data = req.body;
     // delete (data.status); // Elimina el status para que no se edique
     console.log(req.user)
     // data.status = 2
@@ -171,21 +172,21 @@ exports.editVacante = async (req, res, next) => {
 
 /* Cambia el status de una vacante, cualquier int diferente de 0,1,2 regresa error */
 exports.changeStatusVacante = async (req, res, next) => {
-    const { status, id } = req.params;
-    const { empresaId } = req.user;
-    const statusId = parseInt(status);
-    const validStatus = [0, 1, 2];
+    const { status, id } = req.body.data;
+    // console.log(req.body)
+    // const  empresaId  = req.user;
+    // const statusId = parseInt(status);
+    // const validStatus = [0, 1, 2];
 
-    if (!validStatus.some(x => x === statusId)) {
-        return res.status(400).json({
-            ok: false,
-            message: "Estatus no válido."
-        });
-    }
+    // if (!validStatus.some(x => x === statusId)) {
+    //     return res.status(400).json({
+    //         ok: false,
+    //         message: "Estatus no válido."
+    //     });
+    // }
 
     try {
-        const vacante = await Vacantes.findOne({ where: { vacanteId: id, empresaId } });
-
+        const vacante = await Vacantes.findOne({ where: { vacanteId: id } });
         if (!vacante) {
             return res.status(404).json({
                 ok: false,
@@ -193,7 +194,7 @@ exports.changeStatusVacante = async (req, res, next) => {
             });
         }
 
-        vacante.status = statusId;
+        vacante.status = status;
         await vacante.save()
 
         return res.status(200).json({
@@ -213,29 +214,28 @@ exports.changeStatusVacante = async (req, res, next) => {
 
 /* Cambia la disponibilidad de una vacante, cualquier int diferente de 0,1 regresa error (solo la misma empresa puede realizar esta accion)*/
 exports.changeAvailableVacante = async (req, res, next) => {
-    const { status, id } = req.params;
-    const { empresaId } = req.user;
-    const statusId = parseInt(status);
-    const validStatus = [0, 1];
+    const { isDisponible, vacanteId } = req.body.data;
+    // const statusId = parseInt(status);
+    // const validStatus = [0, 1];
 
-    if (!validStatus.some(x => x === statusId)) {
-        return res.status(400).json({
-            ok: false,
-            message: "Estatus no válido."
-        });
-    }
+    // if (!validStatus.some(x => x === statusId)) {
+    //     return res.status(400).json({
+    //         ok: false,
+    //         message: "Estatus no válido."
+    //     });
+    // }
 
     try {
-        const vacante = await Vacantes.findOne({ where: { vacanteId: id, empresaId } })
+        const vacante = await Vacantes.findOne({ where: { vacanteId } })
 
-        if (!vacante) {
-            return res.status(404).json({
-                ok: false,
-                message: "La vacante no se encuentra o ha sido eliminada."
-            });
-        }
+        // if (!vacante) {
+        //     return res.status(404).json({
+        //         ok: false,
+        //         message: "La vacante no se encuentra o ha sido eliminada."
+        //     });
+        // }
 
-        vacante.idDisponible = parseInt(status);
+        vacante.isDisponible = isDisponible
         await vacante.save();
 
         return res.status(200).json({
