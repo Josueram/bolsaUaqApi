@@ -9,7 +9,7 @@ const Empresas = db.define('empresas', {
         autoIncrement: true
     },
     nombreEmpresa: Sequelize.STRING(32),
-    password: {type: Sequelize.STRING,allowNull: true,},
+    password: {type: Sequelize.STRING(100),allowNull: true,},
     descripcion:{type: Sequelize.STRING, allowNull:false},
     ciudad: {type: Sequelize.STRING(32), allowNull:false},
     logo: {type: Sequelize.STRING, allowNull:false},

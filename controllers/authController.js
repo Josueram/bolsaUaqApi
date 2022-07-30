@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken");
 const { Empresas } = require("../models/");
 const { generateJwt } = require("../helpers");
+const bcrypt = require('bcryptjs');
 
 const loginEmpresa = async (req, res, next) => {
 	const { usuario, password } = req.body.data;
-	const empresa = await Empresas.findOne({ where: { usuario: usuario, password: password, status:0 } });
-
-
+	const empresa = await Empresas.findOne({ where: { usuario: usuario, status:0 } });
+	
 	if (!empresa) {
 		return res.status(500).json({
 			ok: false,
@@ -14,6 +14,14 @@ const loginEmpresa = async (req, res, next) => {
 		});
 	}
 
+	const hashPassword = await bcrypt.compare(password, empresa.dataValues.password)
+
+	if (!hashPassword) {
+		return res.status(500).json({
+			ok: false,
+			message: "Usuario o contraseña incorrectos"
+		});
+	}
 
 	// const token = await generateJwt({
 	// 	type: "USER",

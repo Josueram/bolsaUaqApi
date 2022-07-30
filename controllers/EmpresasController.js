@@ -3,6 +3,8 @@ const { Empresas } = require("../models/");
 
 const { imagesService } = require("../services/");
 
+const bcrypt = require('bcryptjs');
+
 /* Regresa los datos de la empresa actual */
 exports.datosEmpresa = async (req, res, next) => {
     try {
@@ -112,10 +114,11 @@ exports.changeStatus = async (req, res, next) => {
                 data: empresa
             });
         }
+
         if(status==0){
             empresa.usuario = usuario;
-            empresa.password = password;
-
+            const hash = await bcrypt.hash(password, 10)
+            empresa.password = hash;
         }
 
         empresa.status = statusId;
