@@ -11,7 +11,7 @@ function buildPDF(dataCallback, endCallback, data) {
 
   doc.fontSize(25).font('Helvetica-Bold').text(data.nombreVacante, 73, 60) // Título de vacante
 
-  doc.fontSize(12).font('Helvetica').text(data.empresa, 74, 105) // 
+  doc.fontSize(12).font('Helvetica').text(data.empresa.nombreEmpresa, 74, 105) // 
 
   doc.fontSize(12).font('Helvetica').text(`${data.rangoSueldo} - ${data.horario}`, 74, 135)
 
@@ -19,29 +19,39 @@ function buildPDF(dataCallback, endCallback, data) {
 
   doc.fontSize(12).font('Helvetica-Bold').text(`Área: ${data.area}`, 74, 185)
 
-  doc.fontSize(12).font('Helvetica-Bold').text("Modalidad:", 74, 240).text("Lugar de contratación:", 230, 240).text("Dirección de la empresa:", 396, 240)
+  doc.fontSize(12).font('Helvetica-Bold').text("Lugar de contratación:", 74, 240).text("Dirección de la empresa:", 230, 240).text("Modalidad:", 396, 240)
 
-  doc.fontSize(12).font('Helvetica').text(`${data.tipoEmpleo} - ${data.tipoContratacion}`, 74, 260, {
+
+  doc.fontSize(12).font('Helvetica').text(`${data.empresa.ciudad} - ${data.empresa.direccion} `, 230, 260, {
     width: 135
   })
 
-  doc.fontSize(12).font('Helvetica').text(`${data.ciudad}, ${data.estado}`, 230, 260, {
+  doc.fontSize(12).font('Helvetica').text(`${data.tipoContratacion}`, 74, 260, {
     width: 135
   })
 
-  doc.fontSize(12).font('Helvetica').text(data.informacion, 396, 260, {
+
+  doc.fontSize(12).font('Helvetica').text(`${data.tipoEmpleo}`, 396, 260, {
     width: 135
   })
 
   doc.moveDown(1);
 
-  doc.fontSize(12).font('Helvetica-Bold').text("Contacto:", 74)
+ 
+
+  doc.fontSize(12).font('Helvetica-Bold').text("Teléfono:", 74)
+  doc.fontSize(12).font('Helvetica').text(data.contacto, 74)
+
+  doc.fontSize(12).font('Helvetica-Bold').text("Correo:", 74)
+  doc.fontSize(12).font('Helvetica').text(data.empresa.emailReclutador, 74)
+
   // .moveDown(-1).text("Correo:", 230)
 
-  doc.fontSize(12).font('Helvetica').text(data.contacto, 74)
+
 
   // doc.fontSize(12).font('Helvetica').moveDown(-1).text(data.contacto, 230)
 
+  // acaabajo
   doc.fontSize(12).font('Helvetica-Bold').moveDown(1).text("Nivel de inlgés:", 74)
 
   doc.fontSize(12).font('Helvetica-Bold').moveDown(-1).text("No. Contratos:", 230)

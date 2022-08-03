@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const db = new Sequelize('portalUaq', 'root', '', {
     host: 'localhost',
     dialect: 'mysql',
-    port: 3306,
+    port: 3308,
     define: {
         timestamps: false
     },

@@ -77,11 +77,10 @@ exports.vacantesEmpresa = async (req, res, next) => {
 /* Regresa el archivo PDF */
 exports.getVacantePdf = async (req, res, next) => {
     const { id } = req.params;
-
     try {
         const vacante = await Vacantes.findOne(
             // {include: [{ model: Empresas, as: 'empresa', attributes: ['nombreEmpresa'] }]}
-            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['nombreEmpresa'] }] }
+            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['nombreEmpresa','ciudad','direccion','emailReclutador',] }] }
         );
 
         if (!vacante) {
@@ -90,17 +89,19 @@ exports.getVacantePdf = async (req, res, next) => {
                 message: "No se encuentra la vacante o se ha eliminado."
             });
         }
-
+        // TODO cambiarle el nombre vacantes.pdf
         const stream = res.writeHead(200, {
             'Content-Type': 'application/pdf',
-            'Content-Disposition': 'attachment;filename=Vacantes.pdf'
+            'Content-Disposition': `attachment;filename=${vacante.nombreVacante}.pdf`
+            
         });
+       console.log(vacante)
         pdfService.buildPDF(
             (chunk) => stream.write(chunk),
             () => stream.end(),
             vacante
         )
-        res.json({ ok: true, vacante });
+        // return res.json({ ok: true, vacante });
     } catch (error) {
         console.log(error)
         return res
@@ -117,6 +118,7 @@ exports.createVacante = async (req, res, next) => {
     // data.status = 0;
     data.empresaId = empresaId;
 
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",data)
     try {
         const vacante = await Vacantes.create(data);
 
