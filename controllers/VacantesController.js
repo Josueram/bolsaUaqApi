@@ -117,8 +117,7 @@ exports.createVacante = async (req, res, next) => {
     // console.log(data)
     // data.status = 0;
     data.empresaId = empresaId;
-
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",data)
+    data.rangoSueldo = '$' + data.rangoSueldo
     try {
         const vacante = await Vacantes.create(data);
 
