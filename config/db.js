@@ -21,7 +21,7 @@ const Sequelize = require('sequelize');
 const db = new Sequelize({
     host: 'us-cdbr-east-06.cleardb.net',
     dialect: 'mysql',
-    user: 'b6e3e3f0bb497c',
+    username: 'b6e3e3f0bb497c',
     password: 'd8c95657',
     database: 'heroku_6a07c725fd6a825',
     //port: 3306,
