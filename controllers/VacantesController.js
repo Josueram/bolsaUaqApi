@@ -155,6 +155,7 @@ exports.editVacante = async (req, res, next) => {
         }
 
         vacante.set(data);
+        console.log(data)
         await vacante.save();
 
         return res.status(200).json({
@@ -163,6 +164,7 @@ exports.editVacante = async (req, res, next) => {
             data: vacante
         });
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             ok: false,
             message: error
