@@ -75,7 +75,6 @@ exports.registerEmpresa = async (req, res, next) => {
         // Todo esta bien con la imagen y se le asigna ese path a la BD
         data.logo = response.data
         // Se guarda la empresa en la BD
-        console.log(data)
         const empresa = await Empresas.create(data)
 
         return res.status(200).json({
@@ -84,7 +83,6 @@ exports.registerEmpresa = async (req, res, next) => {
         });
 
     } catch (error) {
-        console.log(error)
         return res.status(500).json({
             ok: false,
             message: error
