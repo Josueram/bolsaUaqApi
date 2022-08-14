@@ -139,13 +139,13 @@ exports.createVacante = async (req, res, next) => {
 /* Edita la vacante */
 exports.editVacante = async (req, res, next) => {
     const  empresaId  = req.user;
-    const { id } = req.params;
+    // const { id } = req.params;
     const data = req.body;
     // delete (data.status); // Elimina el status para que no se edique
     console.log(req.user)
     // data.status = 2
     try {
-        const vacante = await Vacantes.findOne({ where: { vacanteId: id, empresaId } });
+        const vacante = await Vacantes.findOne({ where: { vacanteId: data.vacanteId, empresaId } });
 
         if (!vacante) {
             return res.status(404).json({
