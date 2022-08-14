@@ -13,7 +13,7 @@ const getImage = (req, res) => {
 
 	// let pathImg = path.join('api', 'uploads', filename);
 
-	console.log(path.join(__dirname, `../uploads/${fileName}`));
+	console.log(path.join(__dirname, `../uploads/${filename}`));
 	res.sendFile(filename, { root: path.join(__dirname, `../uploads'}`) });
 }
 
