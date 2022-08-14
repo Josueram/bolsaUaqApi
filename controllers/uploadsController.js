@@ -12,8 +12,8 @@ const getImage = (req, res) => {
 	// res.sendFile(filename , { root: __dirname });
 
 	// let pathImg = path.join('api', 'uploads', filename);
-	
-	res.sendFile(filename, { root: path.join('api', 'uploads') });
+
+	res.sendFile(filename, { root: path.join(__dirname, '..') });
 }
 
 const uploadImage = async (req, res) => {
