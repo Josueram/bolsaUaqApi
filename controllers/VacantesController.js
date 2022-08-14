@@ -155,6 +155,9 @@ exports.editVacante = async (req, res, next) => {
         }
 
         vacante.set(data);
+
+        vacante.isDisponible = 2
+
         console.log(data)
         await vacante.save();
 
