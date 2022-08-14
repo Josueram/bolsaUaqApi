@@ -69,6 +69,9 @@ const uploadImage = async (file) => {
 const getImage = (fileName) => {
 	let pathImg = path.join(__dirname, `../uploads/${fileName}`);
 
+	console.log(pathImg);
+	console.log('--------------',fileName)
+
 	// imagen por defecto
 	if (!fs.existsSync(pathImg)) {
 		// Si no existe la imagen, se cambia a una por defecto
