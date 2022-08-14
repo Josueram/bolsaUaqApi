@@ -5,6 +5,10 @@ const getImage = (req, res) => {
 	const response = imagesService.getImage(filename); // Busca la ruta del archivo
 
 	res.sendFile(response.data); // Devuelve el archivo correspondiente
+	
+	console.log(filename);
+	console.log(__dirname);
+	res.sendFile(filename , { root: __dirname });
 }
 
 const uploadImage = async (req, res) => {
