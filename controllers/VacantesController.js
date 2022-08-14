@@ -145,7 +145,7 @@ exports.editVacante = async (req, res, next) => {
     console.log(req.user)
     // data.status = 2
     try {
-        const vacante = await Vacantes.findOne({ where: { vacanteId: data.vacanteId, empresaId } });
+        const vacante = await Vacantes.findOne({ where: { vacanteId: data.id, empresaId } });
 
         if (!vacante) {
             return res.status(404).json({
