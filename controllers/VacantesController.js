@@ -142,7 +142,7 @@ exports.editVacante = async (req, res, next) => {
     // const { id } = req.params;
     const data = req.body;
     // delete (data.status); // Elimina el status para que no se edique
-    console.log(req.user)
+    console.log(data)
     // data.status = 2
     try {
         const vacante = await Vacantes.findOne({ where: { vacanteId: data.id, empresaId } });
