@@ -1,3 +1,4 @@
+const path = require("path");
 const { imagesService } = require("../services/");
 
 const getImage = (req, res) => {
@@ -6,9 +7,14 @@ const getImage = (req, res) => {
 
 	// res.sendFile(response.data); // Devuelve el archivo correspondiente
 	
-	console.log(filename);
-	console.log(__dirname);
-	res.sendFile(filename , { root: __dirname });
+	// console.log(filename);
+	// console.log(__dirname);
+	// res.sendFile(filename , { root: __dirname });
+
+	// let pathImg = path.join('api', 'uploads', filename);
+	
+	console.log(path.join('api', 'uploads', filename));
+	res.sendFile(path.join('api', 'uploads', filename));
 }
 
 const uploadImage = async (req, res) => {
