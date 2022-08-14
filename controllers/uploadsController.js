@@ -2,9 +2,9 @@ const { imagesService } = require("../services/");
 
 const getImage = (req, res) => {
 	const { filename } = req.params;
-	const response = imagesService.getImage(filename); // Busca la ruta del archivo
+	// const response = imagesService.getImage(filename); // Busca la ruta del archivo
 
-	res.sendFile(response.data); // Devuelve el archivo correspondiente
+	// res.sendFile(response.data); // Devuelve el archivo correspondiente
 	
 	console.log(filename);
 	console.log(__dirname);
