@@ -68,7 +68,7 @@ const uploadImage = async (file) => {
  */
 const getImage = (fileName) => {
 	// let pathImg = path.join(__dirname, `../uploads/${fileName}`);
-	let pathImg = `api/uploads/${fileName}`;
+	let pathImg =  `https://bolsa-uaq-api-2022.herokuapp.com/api/uploads/${fileName}`;
 
 	console.log(pathImg);
 	console.log('--------------',fileName)
