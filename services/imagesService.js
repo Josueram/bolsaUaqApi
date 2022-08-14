@@ -67,7 +67,8 @@ const uploadImage = async (file) => {
  * @returns Devuelve una respuesta (ok, message, data) con la ruta local del archivo.
  */
 const getImage = (fileName) => {
-	let pathImg = path.join(__dirname, `../uploads/${fileName}`);
+	// let pathImg = path.join(__dirname, `../uploads/${fileName}`);
+	let pathImg = `api/uploads/${fileName}`;
 
 	console.log(pathImg);
 	console.log('--------------',fileName)
