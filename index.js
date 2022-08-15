@@ -20,7 +20,7 @@ app.use(expressFileUpload());
 let ping = 14400000
 setTimeout(()=>{
     console.log("ping")
-},30000)
+},ping)
 
 app.use('/api', mainRouter) // Main router
 
