@@ -13,7 +13,7 @@ const Vacantes = db.define('vacantes', {
     competencias: {type: Sequelize.STRING, allowNull:false},
     tipoContratacion: {type: Sequelize.STRING(32), allowNull:false},
     tipoEmpleo: {type: Sequelize.STRING(32), allowNull:false},
-    informacion: {type: Sequelize.STRING(32), allowNull:false},
+    informacion: {type: Sequelize.STRING, allowNull:false},
     estado: {type: Sequelize.STRING(32), allowNull:false},
     ciudad: {type: Sequelize.STRING(32), allowNull:false},
     nivelIngles: {type: Sequelize.STRING(32), allowNull:false},
