@@ -19,13 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(expressFileUpload());
 let ping = 14400000
 setTimeout(()=>{
-    router.get("/",(req,res,next)=>{
-        console.log("soy un ping al server")
-        return res.status(200).json({
-            ok: true,
-            message: "Pong",
-        });
-    })
+    console.log("ping")
 },30000)
 
 app.use('/api', mainRouter) // Main router
