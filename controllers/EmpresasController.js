@@ -75,10 +75,10 @@ exports.registerEmpresa = async (req, res, next) => {
             });
         }
         
-        empresa.logo = response.data
+        data.logo = response.data
         // Todo esta bien con la imagen y se le asigna ese path a la BD
         // console.log(response.data);
-        // Se guarda la empresa en la BD
+        // Se guarda la empresa en la BD    
         console.log("final--------")
         const empresa = await Empresas.create(data)
 
