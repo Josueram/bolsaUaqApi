@@ -6,7 +6,6 @@ const path = require("path");
 const fs = require("fs");
 // const { response } = require("express");
 const { v4: uuidv4 } = require('uuid');
-const fs = require('fs');
 const cloudinary = require('cloudinary');
 /**
  * Se intenta almacenar una imagen de forma local y generarle un nombre único.
