@@ -5,6 +5,9 @@ const { imagesService } = require("../services/");
 
 const bcrypt = require('bcryptjs');
 
+const fs = require('fs');
+const cloudinary = require('cloudinary');
+
 /* Regresa los datos de la empresa actual */
 exports.datosEmpresa = async (req, res, next) => {
     try {
@@ -64,17 +67,26 @@ exports.registerEmpresa = async (req, res, next) => {
     const data = req.body;
     try {
         // La imagen se sube
-        const response = await imagesService.uploadImage(req.files?.logo);
+        // const response = await imagesService.uploadImage(req.files?.logo);
         // Algo esta mal con la imagen
-        if (!response.ok) {
-            return res.status(400).json({
-                ok: false,
-                message: response.message,
-            });
-        }
+        let stream = cloudinary.uploader.upload_stream((result)=>{
+            console.log(result)
+            data.logo = response.urls
+        });
+        let file_reader = fs.createReadStream(req.files?.logo, {encoding: 'binary'})
+        .on('data', stream.write)
+        .on('end', stream.end);
+
+
+
+        // if (!response.ok) {
+        //     return res.status(400).json({
+        //         ok: false,
+        //         message: response.message,
+        //     });
+        // }
         // Todo esta bien con la imagen y se le asigna ese path a la BD
-        console.log(response.data);
-        data.logo = response.data
+        // console.log(response.data);
         // Se guarda la empresa en la BD
         const empresa = await Empresas.create(data)
 

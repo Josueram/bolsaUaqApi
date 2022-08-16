@@ -1,5 +1,7 @@
 const path = require("path");
 const { imagesService } = require("../services/");
+const cloudinary = require('cloudinary');
+const fs = require('fs');
 
 const getImage = (req, res) => {
 	const { filename } = req.params;

@@ -6,6 +6,7 @@ const mainRouter = require("./mainRouter");
 const expressFileUpload = require('express-fileupload');
 const { Router } = require("express");
 const router = require("./mainRouter");
+const cloudinary = require('cloudinary')
 
 db.sync()
     .then(() => console.log('DB connected'))
@@ -21,6 +22,13 @@ let ping = 14400000
 setTimeout(()=>{
     console.log("ping")
 },ping)
+
+// Config cloudinary
+cloudinary.config({ 
+    cloud_name: 'hj0rkvay8', 
+    api_key: '717929115926744', 
+    api_secret: 'qlQJvgoa-SMODGy4oiEZItKCybI' 
+});
 
 app.use('/api', mainRouter) // Main router
 
