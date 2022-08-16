@@ -54,7 +54,7 @@ const uploadImage = async (file) => {
 		console.log("mitad--------")
 
 				console.log(result)
-				newPath = result.urls
+				newPath = result.url
 		});
 		let file_reader = fs.createReadStream(path, {encoding: 'binary'})
 		.on('data', stream.write)
