@@ -101,6 +101,7 @@ exports.registerEmpresa = async (req, res, next) => {
         });
 
     } catch (error) {
+        console.log(error)
         return res.status(500).json({
             ok: false,
             message: error
