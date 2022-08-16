@@ -50,7 +50,7 @@ const uploadImage = async (file) => {
 		console.log(path)
 		console.log("inicio--------")
 
-    cloudinary.uploader.upload(path,
+    await cloudinary.uploader.upload(path,
 			(result)=> { 
 				console.log("mitad--------")
 				console.log(result) 
