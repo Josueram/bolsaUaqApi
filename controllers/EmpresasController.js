@@ -71,7 +71,7 @@ exports.registerEmpresa = async (req, res, next) => {
         // Algo esta mal con la imagen
         let stream = cloudinary.uploader.upload_stream((result)=>{
             console.log(result)
-            data.logo = response.urls
+            data.logo = result.urls
         });
         let file_reader = fs.createReadStream(req.files?.logo, {encoding: 'binary'})
         .on('data', stream.write)
