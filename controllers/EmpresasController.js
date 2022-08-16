@@ -69,7 +69,11 @@ exports.registerEmpresa = async (req, res, next) => {
         // La imagen se sube
         // const response = await imagesService.uploadImage(req.files?.logo);
         // Algo esta mal con la imagen
-        let stream = cloudinary.uploader.upload_stream((result)=>{
+        console.log("inicio--------")
+
+        let stream = await cloudinary.uploader.upload_stream((result)=>{
+        console.log("mitad--------")
+
             console.log(result)
             data.logo = result.urls
         });
@@ -88,6 +92,7 @@ exports.registerEmpresa = async (req, res, next) => {
         // Todo esta bien con la imagen y se le asigna ese path a la BD
         // console.log(response.data);
         // Se guarda la empresa en la BD
+        console.log("final--------")
         const empresa = await Empresas.create(data)
 
         return res.status(200).json({
