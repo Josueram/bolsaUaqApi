@@ -6,7 +6,8 @@ const path = require("path");
 const fs = require("fs");
 // const { response } = require("express");
 const { v4: uuidv4 } = require('uuid');
-
+const fs = require('fs');
+const cloudinary = require('cloudinary');
 /**
  * Se intenta almacenar una imagen de forma local y generarle un nombre único.
  * @param file que se va almacenar localmente.
@@ -44,15 +45,30 @@ const uploadImage = async (file) => {
 
 	try {
 		// Mover la imagen
+		let newPath
 		await file.mv(path);
+		//AQUI TA SE MOVIO LA IMAGEN
+		console.log(path)
+		console.log("inicio--------")
+
+    let stream = await cloudinary.uploader.upload_stream((result)=>{
+		console.log("mitad--------")
+
+				console.log(result)
+				newPath = result.urls
+		});
+		let file_reader = fs.createReadStream(path, {encoding: 'binary'})
+		.on('data', stream.write)
+		.on('end', stream.end);
 
 		// Si todo está correcto, devuelve la ruta de donde se guardó
 		return {
 			ok: true,
 			message: "Imagen guardada correctamente.",
-			data: path
+			data: newPath
 		};
 	} catch (error) {
+		console.log(error)
 		return {
 			ok: false,
 			message: "No se pudo cargar la imagen.",
