@@ -50,15 +50,12 @@ const uploadImage = async (file) => {
 		console.log(path)
 		console.log("inicio--------")
 
-    let stream = await cloudinary.uploader.upload_stream((result)=>{
-		console.log("mitad--------")
-
-				console.log(result)
+    cloudinary.uploader.upload(path,
+			(result)=> { 
+				console.log("mitad--------")
+				console.log(result) 
 				newPath = result.url
-		});
-		let file_reader = fs.createReadStream(path, {encoding: 'binary'})
-		.on('data', stream.write)
-		.on('end', stream.end);
+			})
 
 		// Si todo está correcto, devuelve la ruta de donde se guardó
 		return {
