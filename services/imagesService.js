@@ -71,7 +71,7 @@ const uploadImage = async (file) => {
 		return {
 			ok: false,
 			message: "No se pudo cargar la imagen.",
-			data: null
+			data: "nosrivio"
 		};
 	}
 }
