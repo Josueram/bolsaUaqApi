@@ -27,7 +27,7 @@ async function buildPDF(dataCallback, endCallback, data) {
         })
 console.log(image)
 let bufferedImage = new Buffer.from(image.data,'base64')
-  doc.image(bufferedImage, 450, 165, {scale: 0.50})
+  doc.image(bufferedImage, 350, 135, {scale: 0.50}) 
   
 //---
 
