@@ -22,7 +22,7 @@ function buildPDF(dataCallback, endCallback, data) {
 
   //doc.image(data.empresa.logo, 320, 280, {scale: 0.25}).text('Scale', 320, 265);
   let url = data.empresa.logo
-  fetch(url, () => {
+  fetch(url, async () => {
 
     const response = await fetch(src);
     const image = await response.buffer();
