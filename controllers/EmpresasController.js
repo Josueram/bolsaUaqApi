@@ -112,6 +112,7 @@ exports.changeStatus = async (req, res, next) => {
     }
 
     try {
+        console.log(req.body.data)
         const empresa = await Empresas.findOne({ where: { empresaId: id } });
 
         if (!empresa) {
