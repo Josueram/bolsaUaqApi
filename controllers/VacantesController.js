@@ -80,7 +80,7 @@ exports.getVacantePdf = async (req, res, next) => {
     try {
         const vacante = await Vacantes.findOne(
             // {include: [{ model: Empresas, as: 'empresa', attributes: ['nombreEmpresa'] }]}
-            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['nombreEmpresa','ciudad','direccion','emailReclutador',] }] }
+            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['nombreEmpresa','ciudad','direccion','emailReclutador','logo'] }] }
         );
 
         if (!vacante) {
