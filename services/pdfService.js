@@ -1,3 +1,4 @@
+const { request } = require('express');
 const PDFDocument = require('pdfkit');
 
 function buildPDF(dataCallback, endCallback, data) {
@@ -19,7 +20,18 @@ function buildPDF(dataCallback, endCallback, data) {
 
   doc.fontSize(12).font('Helvetica-Bold').text(`Área: ${data.area}`, 74, 185)
 
-  doc.image(data.empresa.logo, 320, 280, {scale: 0.25}).text('Scale', 320, 265);
+  //doc.image(data.empresa.logo, 320, 280, {scale: 0.25}).text('Scale', 320, 265);
+  request({ url, encoding: null }, (error, response, body) => {
+
+    if (!error && response.statusCode === 200) {
+        pdf.pipe(fs.createWriteStream('out.pdf'));
+
+        var img = new Buffer.from(body, 'base64');
+        pdf.image(img, 0, 0);
+
+    }
+});
+//---
 
   doc.fontSize(12).font('Helvetica-Bold').text("Lugar de contratación:", 74, 240).text("Dirección de la empresa:", 230, 240).text("Modalidad:", 396, 240)
 
