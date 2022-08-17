@@ -25,7 +25,7 @@ async function buildPDF(dataCallback, endCallback, data) {
   const image =  await Axios.get(url, {
             responseType: 'arraybuffer'
         })
-
+console.log(image)
   doc.image(image, 0, 200);
 //---
 
