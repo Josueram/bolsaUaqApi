@@ -19,7 +19,7 @@ function buildPDF(dataCallback, endCallback, data) {
 
   doc.fontSize(12).font('Helvetica-Bold').text(`Área: ${data.area}`, 74, 185)
 
-  doc.image(`https://bolsa-uaq-api-2022.herokuapp.com/api/uploads/${data.empresa.logo}`, 320, 280, {scale: 0.25}).text('Scale', 320, 265);
+  doc.image(ata.empresa.logo, 320, 280, {scale: 0.25}).text('Scale', 320, 265);
 
   doc.fontSize(12).font('Helvetica-Bold').text("Lugar de contratación:", 74, 240).text("Dirección de la empresa:", 230, 240).text("Modalidad:", 396, 240)
 
