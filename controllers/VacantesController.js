@@ -95,7 +95,6 @@ exports.getVacantePdf = async (req, res, next) => {
             'Content-Disposition': `attachment;filename=${vacante.nombreVacante}.pdf`
             
         });
-       console.log(vacante)
         pdfService.buildPDF(
             (chunk) => stream.write(chunk),
             () => stream.end(),
