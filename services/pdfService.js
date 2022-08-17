@@ -26,7 +26,8 @@ async function buildPDF(dataCallback, endCallback, data) {
             responseType: 'arraybuffer'
         })
 console.log(image)
-  doc.image(image, 0, 200);
+let bufferedImage = new Buffer.from(image.data,'base64')
+  doc.image(bufferedImage, 0, 200);
 //---
 
   doc.fontSize(12).font('Helvetica-Bold').text("Lugar de contratación:", 74, 240).text("Dirección de la empresa:", 230, 240).text("Modalidad:", 396, 240)
