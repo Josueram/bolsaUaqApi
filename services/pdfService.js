@@ -22,15 +22,18 @@ function buildPDF(dataCallback, endCallback, data) {
 
   //doc.image(data.empresa.logo, 320, 280, {scale: 0.25}).text('Scale', 320, 265);
   let url = data.empresa.logo
-  request({ url, encoding: null }, (error, response, body) => {
+  fetch(url, (error, response, body) => {
 
-    if (!error && response.statusCode === 200) {
-        pdf.pipe(fs.createWriteStream('out.pdf'));
+    const response = await fetch(src);
+    const image = await response.buffer();
+    doc.image(image, 0, 200);
+    // if (!error && response.statusCode === 200) {
+    //     pdf.pipe(fs.createWriteStream('out.pdf'));
 
-        var img = new Buffer.from(body, 'base64');
-        pdf.image(img, 0, 0);
+    //     var img = new Buffer.from(body, 'base64');
+    //     pdf.image(img, 0, 0);
 
-    }
+    // }
 });
 //---
 
