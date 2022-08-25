@@ -19,6 +19,11 @@
   router.put("/",
 	  authorization,
 	  empresasController.putEmpresa);
+
+	/* PATCH, cambia la contraseña -------- */
+router.patch("/",
+	authorization,
+	empresasController.changuePassword);
  
  // /* POST Una empresa envía solicitud para aprobación */
  router.post("/registrar",

@@ -162,3 +162,29 @@ exports.putEmpresa = async (req,res,next) => {
         return res.status(400).json({ message: "Algo salio mal" });
     }
 }
+
+exports.changuePassword = async (req,res,next) => {
+    try{
+        const { actualPassword,newPassword} = req.body.data;
+        const {empresaId} = req.user
+
+        const empresa = await Empresas.findOne({where:{empresaId:empresaId}})
+        const hashPassword = await bcrypt.compare(actualPassword, empresa.dataValues.password)
+
+        if (!hashPassword) {
+            return res.status(500).json({
+                ok: false,
+                message: "Contraseña incorrecta"
+            });
+        }
+        const hash = await bcrypt.hash(newPassword, 10)
+        empresa.password = hash;
+        await empresa.save()
+
+        return res.status(200).json({ message: `Contraseña cambiada exitosamente` });
+
+        
+    } catch(e){
+        console.log(e)
+    }
+}
