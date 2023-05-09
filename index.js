@@ -4,8 +4,6 @@ const cors = require('cors');
 const { db } = require('./config');
 const mainRouter = require("./mainRouter");
 const expressFileUpload = require('express-fileupload');
-const { Router } = require("express");
-const router = require("./mainRouter");
 const cloudinary = require('cloudinary')
 
 db.sync()
@@ -18,10 +16,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(expressFileUpload());
-let ping = 14400000
-setTimeout(()=>{
-    console.log("ping")
-},ping)
+// let ping = 14400000
+// setTimeout(()=>{
+//     console.log("ping")
+// },ping)
 
 // Config cloudinary
 cloudinary.config({ 
