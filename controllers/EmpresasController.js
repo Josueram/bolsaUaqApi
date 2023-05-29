@@ -166,7 +166,7 @@ exports.putEmpresa = async (req,res,next) => {
 exports.changuePassword = async (req,res,next) => {
     try{
         const { actualPassword,nuevoPassword} = req.body.data;
-        const {empresaId} = req.user
+        const empresaId = req.user
 
         const empresa = await Empresas.findOne({where:{empresaId:empresaId}})
         const hashPassword = await bcrypt.compare(actualPassword, empresa.dataValues.password)
@@ -186,5 +186,6 @@ exports.changuePassword = async (req,res,next) => {
         
     } catch(e){
         console.log(e)
+        return res.status(400).json({ message: `Algo salio mal` });
     }
 }

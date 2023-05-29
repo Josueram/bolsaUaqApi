@@ -1,6 +1,6 @@
 /**
  * Ruta para la empresa actual y su registro.
- * Path: api/uploads/
+ * Path: api/empresa/
  */
  const { Router } = require("express");
  const { empresasController, vacantesController } = require("../controllers");
