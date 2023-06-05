@@ -43,7 +43,7 @@ const loginEmpresa = async (req, res, next) => {
 const loginVinculador = async (req, res, next) => {
 
 	const { usuario, password } = req.body.data;
-	if (usuario === "ADMIN" && password === "ADMIN") {
+	if (usuario === "10949" && password === "10949.") {
 
 		const token = jwt.sign(
 			{
