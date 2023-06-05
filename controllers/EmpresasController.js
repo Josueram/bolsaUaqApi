@@ -66,17 +66,17 @@ exports.registerEmpresa = async (req, res, next) => {
     const data = req.body;
     try {
         // La imagen se sube
-        const response = await imagesService.uploadImage(req.files?.logo);
-        // Algo esta mal con la imagen
-        if (!response.ok) {
-            return res.status(400).json({
-                ok: false,
-                message: response.message,
-            });
-        }
+        // const response = await imagesService.uploadImage(req.files?.logo);
+        // // Algo esta mal con la imagen
+        // if (!response.ok) {
+        //     return res.status(400).json({
+        //         ok: false,
+        //         message: response.message,
+        //     });
+        // }
         
-        data.logo = response.data
-        console.log(data)
+        // data.logo = response.data
+        // console.log(data)
         // Todo esta bien con la imagen y se le asigna ese path a la BD
         // console.log(response.data);
         // Se guarda la empresa en la BD    

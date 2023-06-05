@@ -12,7 +12,7 @@ const Empresas = db.define('empresas', {
     password: {type: Sequelize.STRING(100),allowNull: true,},
     descripcion:{type: Sequelize.STRING, allowNull:false},
     ciudad: {type: Sequelize.STRING, allowNull:false},
-    logo: {type: Sequelize.STRING, allowNull:false},
+    logo: {type: Sequelize.STRING, allowNull:true},
     rfc: {type: Sequelize.STRING(32), allowNull:false},
     giro: {type: Sequelize.STRING, allowNull:false},
     razonSocial: {type: Sequelize.STRING(32), allowNull:false},
