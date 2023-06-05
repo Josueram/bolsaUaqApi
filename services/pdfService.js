@@ -21,13 +21,13 @@ async function buildPDF(dataCallback, endCallback, data) {
   doc.fontSize(12).font('Helvetica-Bold').text(`Área: ${data.area}`, 74, 185)
 
   //doc.image(data.empresa.logo, 320, 280, {scale: 0.25}).text('Scale', 320, 265);
-  let url = data.empresa.logo
-  const image =  await Axios.get(url, {
-            responseType: 'arraybuffer'
-        })
-console.log(image)
-let bufferedImage = new Buffer.from(image.data,'base64')
-  doc.image(bufferedImage, 380, 105, {scale: 0.50}) 
+//   let url = data.empresa.logo
+//   const image =  await Axios.get(url, {
+//             responseType: 'arraybuffer'
+//         })
+// console.log(image)
+// let bufferedImage = new Buffer.from(image.data,'base64')
+//   doc.image(bufferedImage, 380, 105, {scale: 0.50}) 
   
 //---
 

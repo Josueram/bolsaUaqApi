@@ -26,6 +26,7 @@ const Vacantes = db.define('vacantes', {
     prestaciones: {type: Sequelize.STRING, allowNull:false},
     otrosRequisitos:{type: Sequelize.STRING, allowNull:false},
     fechaRegistro: {type: Sequelize.DATEONLY,allowNull: true, defaultValue: Sequelize.NOW},
+    fechaVencimiento: {type: Sequelize.DATEONLY,allowNull: true},
     // 0 aceptada,1 rechazada, 2 pendiente
     status: { type: Sequelize.INTEGER(1), allowNull: true, defaultValue: 2 },
     // 0 disponible, 1 ocupada
