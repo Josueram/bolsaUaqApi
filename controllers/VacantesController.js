@@ -14,8 +14,8 @@ exports.getVacantes = async (req, res, next) => {
             // // ]
             include: [{ model: Empresas, attributes: ['nombreEmpresa'] }],
             order: [
-                [{ model: Empresas, }, 'nombreEmpresa', 'ASC'],
-                ['isDisponible','ASC']
+                ['isDisponible','ASC'],
+                [Empresas, 'nombreEmpresa', 'ASC'],
             ]
         });
         return res.status(200).json({ message: vacantes });
