@@ -4,7 +4,6 @@ module.exports = (req, res, next) => {
 
     if (!req.headers.authorization) {
         return res.status(403).json({
-            ok: false,
             message: 'No cuentas con los permisios necesarios.'
         });
     }
@@ -18,13 +17,11 @@ module.exports = (req, res, next) => {
         // req.user = payload; // Guarda los datos de la sesión
         const decoded = jwt.verify(token, 'debugkey');
         req.user = decoded.user;
+        req.userType = decoded.userType;
         next();
 
     } catch (error) {
-        // Unauthorize
-        // console.log(error)
         res.status(403).json({
-            ok: false,
             message: 'No cuentas con los permisios necesarios.'
         });
     }

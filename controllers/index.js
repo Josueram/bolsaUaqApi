@@ -1,11 +1,9 @@
-const authController = require("./authController");
-const empresasController = require("./EmpresasController");
-const uploadsController = require("./uploadsController");
-const vacantesController = require("./VacantesController");
+const EmpresasController = require("./EmpresasController");
+const VinculadorController = require("./VinculadorController");
+const VacantesController = require("./VacantesController");
 
 module.exports = {
-	authController,
-	empresasController,
-	uploadsController,
-	vacantesController
+	EmpresasController,
+	VinculadorController,
+	VacantesController
 };

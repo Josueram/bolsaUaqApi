@@ -1,27 +1,21 @@
 /**
  * Router principal con las demás rutas secundarias
- * PATH: /api/
+ * PATH: /
  */
 
 const { Router } = require("express");
-// const expressFileUpload = require('express-fileupload');
 
 // Routes
 const {
-	authRoute,
-	empresaRoute,
-	empresasRoute,
-	uploadsRoute,
-	vacantesRoute
+	empresasRoutes,
+	vinculadorRoutes,
+	vacantesRoutes
 } = require("./routes");
 
 const router = Router();
-// router.use(expressFileUpload());
 
-router.use("/auth", authRoute);
-router.use("/empresa", empresaRoute);
-router.use("/empresas", empresasRoute);
-router.use("/uploads", uploadsRoute);
-router.use("/vacantes", vacantesRoute);
+router.use("vacantes", vacantesRoutes);
+router.use("empresas", empresasRoutes);
+router.use("vinculador", vinculadorRoutes);
 
 module.exports = router;

@@ -1,260 +1,184 @@
-//Models
 const { Empresas, Vacantes } = require("../models/");
 const { pdfService } = require("../services/");
 
-/* Regresa todas las vacantes */
-exports.getVacantes = async (req, res, next) => {
+// GET /vacantes?id=number obtiene todas las vacantes, si se le da una id obtiene una sola vacante
+// si una empresa logeada hace la solicitud obtiene solo lo de ella
+// si un vinculador logeado hace la solicitud puede obtener todo
+exports.get = async (req,res,next) => {
     try {
-        const vacantes = await Vacantes.findAll({
-            // include: [{ model: Empresas, attributes: ['nombreEmpresa'],order:[
-            //     ['nombreEmpresa','ASC']
-            // ]}],
-            // // order:[
-            // //     ['empresas','ASC']
-            // // ]
-            include: [{ model: Empresas, attributes: ['nombreEmpresa'] }],
-            order: [
-                ['isDisponible','ASC'],
-                [Empresas, 'nombreEmpresa', 'ASC'],
-            ]
-        });
-        return res.status(200).json({ message: vacantes });
+        const { id } = req.query;
+        const { userType } = req;
+    
+        switch (userType) {
+            
+          case 'admin':
+            if (typeof id === 'undefined') {
+                // Obtiene todas las vacantes
+                const vacantes = await Vacantes.findAll({
+                    include: [{ model: Empresas, attributes: ['name'] }],
+                    order: [
+                        ['disponibility','ASC'],
+                        [Empresas, 'name', 'ASC'],
+                    ]
+                });
+                return res.status(200).json({vacantes });
+
+            } else if (typeof id === 'number') {
+                // Obtiene una vacante
+                const vacante = await Vacantes.findOne(
+                    { where: { id }, include: [{ model: Empresas, attributes: ['name'] }] }
+                );
+                
+                return res.status(200).json({ vacante });
+            }
+            break;
+    
+          case 'company':
+            const companyId = req.user;
+            if (companyId === id) {
+                // Obtiene una vacante de la empresa logeada
+                const vacante = await Vacantes.findOne(
+                    { where: { id }, include: [{ model: Empresas, attributes: ['name'] }] }
+                );
+                
+                return res.status(200).json({ vacante });
+            } else {
+              return res.status(403).json({
+                message: 'No cuentas con los permisos necesarios.',
+              });
+            }
+        }
+
     } catch (error) {
         console.log(error)
         return res
-            .status(400)
-            .json({ message: "Error al obtener las vacantes" });
+        .status(500)
+        .json({ message: "Error del servidor" });
     }
 }
 
-/* Regresa todas las vacantes */
-exports.getVacanteById = async (req, res, next) => {
-
-    const { id } = req.params;
-
+// GET /vacantes/pdf/:id genera y manda el pdf del id de la vacante dada
+exports.getPdf = async (req,res,next) => {
     try {
+        const { id } = req.params;
         const vacante = await Vacantes.findOne(
-            // {include: [{ model: Empresas, as: 'empresa', attributes: ['nombreEmpresa'] }]}
-            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['nombreEmpresa'] }] }
+            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['name','city','address','recruiter_email'] }] }
         );
 
-        if (!vacante) {
-            return res.status(404).json({
-                ok: false,
-                message: "No se encuentra la vacante o se ha eliminado."
-            });
-        }
-
-        // TODO que tambien regrese el nombre de la empresa
-        return res.status(200).json({
-            ok: true,
-            data: vacante
-        });
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            ok: false,
-            message: "Error al encontrar la vacantes."
-        });
-    }
-}
-
-/* Regresa las vacantes de la empresa logeada */
-exports.vacantesEmpresa = async (req, res, next) => {
-    try {
-        const empresaId = req.user;
-        const vacantes = await Vacantes.findAll({ where: { empresaId } });
-        // TODO que tambien regrese el nombre de la empresa
-        return res.status(200).json({ message: vacantes });
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            ok: false,
-            message: "Error al obtener las vacantes"
-        });
-    }
-}
-
-/* Regresa el archivo PDF */
-exports.getVacantePdf = async (req, res, next) => {
-    const { id } = req.params;
-    try {
-        const vacante = await Vacantes.findOne(
-            // {include: [{ model: Empresas, as: 'empresa', attributes: ['nombreEmpresa'] }]}
-            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['nombreEmpresa','ciudad','direccion','emailReclutador','logo'] }] }
-        );
-
-        if (!vacante) {
-            return res.status(404).json({
-                ok: false,
-                message: "No se encuentra la vacante o se ha eliminado."
-            });
-        }
-        // TODO cambiarle el nombre vacantes.pdf
         const stream = res.writeHead(200, {
             'Content-Type': 'application/pdf',
-            'Content-Disposition': `attachment;filename=${vacante.nombreVacante}.pdf`
-            
+            'Content-Disposition': `attachment;filename=${vacante.name}.pdf`
         });
         pdfService.buildPDF(
             (chunk) => stream.write(chunk),
             () => stream.end(),
             vacante
         )
-        // return res.json({ ok: true, vacante });
     } catch (error) {
         console.log(error)
         return res
-            .status(500)
-            .json({ message: "Error al generar PDF" });
+        .status(500)
+        .json({ message: "Error del servidor" });
     }
 }
 
-/* Crea una vacante */
-exports.createVacante = async (req, res, next) => {
-    let data = req.body.form;
-    const  empresaId  = req.user;
-    // console.log(data)
-    // data.status = 0;
-    data.empresaId = empresaId;
-    data.rangoSueldo = '$' + data.rangoSueldo
+// POST /vacantes crea una vacante
+exports.post = async (req,res,next) => {
     try {
-        const vacante = await Vacantes.create(data);
+        let data = req.body;
+        const  empresaId  = req.user;
+        data.empresaId = empresaId;
+        await Vacantes.create(data);
 
         return res.status(200).json({
-            ok: true,
             message: "Solicitud de vacante enviada",
-            data: vacante
         });
     } catch (error) {
         console.log(error)
-        return res.status(500).json({
-            ok: false,
-            message: error
-        });
+        return res
+        .status(500)
+        .json({ message: "Error del servidor" });
     }
-
 }
 
-/* Edita la vacante */
-exports.editVacante = async (req, res, next) => {
-    const  empresaId  = req.user;
-    // const { id } = req.params;
-    const data = req.body.form;
-    // delete (data.status); // Elimina el status para que no se edique
-    console.log(data)
-    // data.status = 2
+// PUT /vacantes Edita completamente una vacante, cuando se edita una vacante, sus status vuelve a 'inRevision'
+exports.put = async (req,res,next) => {
     try {
-        const vacante = await Vacantes.findOne({ where: { vacanteId: data.vacanteId, empresaId } });
+        const empresaId = req.user;
+        const data = req.body;
+        const vacante = await Vacantes.findOne({ where: { id: data.id, empresa_id:empresaId } });
 
         if (!vacante) {
             return res.status(404).json({
                 ok: false,
-                message: "No se encuentra la vacante o se ha eliminado."
+                message: "No existe la vacante"
             });
         }
 
         vacante.set(data);
 
-        vacante.status = 2
+        vacante.status = 'inRevision'
 
-        console.log(data)
         await vacante.save();
 
         return res.status(200).json({
-            ok: true,
             message: "Vacante actualizada correctamente.",
-            data: vacante
         });
     } catch (error) {
         console.log(error)
-        return res.status(500).json({
-            ok: false,
-            message: error
-        });
+        return res
+        .status(500)
+        .json({ message: "Error del servidor" });
     }
-
 }
 
-/* Cambia el status de una vacante, cualquier int diferente de 0,1,2 regresa error */
-exports.changeStatusVacante = async (req, res, next) => {
-    const { status, id } = req.body.data;
-    // console.log(req.body)
-    // const  empresaId  = req.user;
-    // const statusId = parseInt(status);
-    // const validStatus = [0, 1, 2];
-
-    // if (!validStatus.some(x => x === statusId)) {
-    //     return res.status(400).json({
-    //         ok: false,
-    //         message: "Estatus no válido."
-    //     });
-    // }
-
+// PUT /vacantes Edita el status de una vacante (solo a rejected,accepted,inRevision) o su disponibilidad (available,taken)
+exports.patch = async (req,res,next) => {
     try {
+        const { status, id } = req.body;
+        let rowToPatch = 'status'
+        const acceptedStatus = ['rejected','accepted','inRevision']
+
+        // si el status que se manda no es del tipo acceptedStatus entonces es del tipo disponibility
+        if (!acceptedStatus.some(status => status === status)) {
+            rowToPatch = 'disponibility'
+        }
         const vacante = await Vacantes.findOne({ where: { vacanteId: id } });
-        if (!vacante) {
-            return res.status(404).json({
-                ok: false,
-                message: "No se encuentra la vacante o se ha eliminado."
-            });
+
+        switch(rowToPatch){
+            case 'status':
+                vacante.status = status;
+                break
+            case 'disponibility':
+                vacante.disponibility = status
+                break
         }
 
-        vacante.status = status;
-        await vacante.save()
-
-        return res.status(200).json({
-            ok: false,
-            message: "Estatus de la vacante actualizado correctamente.",
-            data: vacante
-        });
-
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({
-            ok: false,
-            message: error
-        });
-    }
-}
-
-/* Cambia la disponibilidad de una vacante, cualquier int diferente de 0,1 regresa error (solo la misma empresa puede realizar esta accion)*/
-exports.changeAvailableVacante = async (req, res, next) => {
-    const { isDisponible, vacanteId } = req.body.data;
-    // const statusId = parseInt(status);
-    // const validStatus = [0, 1];
-
-    // if (!validStatus.some(x => x === statusId)) {
-    //     return res.status(400).json({
-    //         ok: false,
-    //         message: "Estatus no válido."
-    //     });
-    // }
-
-    try {
-        const vacante = await Vacantes.findOne({ where: { vacanteId } })
-
-        // if (!vacante) {
-        //     return res.status(404).json({
-        //         ok: false,
-        //         message: "La vacante no se encuentra o ha sido eliminada."
-        //     });
-        // }
-
-        vacante.isDisponible = isDisponible
         await vacante.save();
 
         return res.status(200).json({
-            ok: true,
             message: "Estatus de la vacante actualizado correctamente.",
-            data: vacante
         });
-
     } catch (error) {
         console.log(error)
-        return res.status(500).json({
-            ok: false,
-            message: "No se pudo editar el estatus de la vacante."
-        });
+        return res
+        .status(500)
+        .json({ message: "Error del servidor" });
+    }
+}
+
+// PUT /vacantes Setea el status de una vacante a deleted
+exports.delete = async (req,res,next) => {
+    try {
+        const { id } = req.body;
+        const vacante = await Vacantes.findOne({ where: { id } });
+  
+        vacante.status = 'deleted';
+        await vacante.save()
+    } catch (error) {
+        console.log(error)
+        return res
+        .status(500)
+        .json({ message: "Error del servidor" });
     }
 }

@@ -3,44 +3,39 @@ const { db } = require('../config/')
 const Vacantes = require('./Vacantes')
 
 const Empresas = db.define('empresas', {
-    empresaId: {
+    id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    nombreEmpresa: Sequelize.STRING,
+    name: Sequelize.STRING,
     password: {type: Sequelize.STRING(100),allowNull: true,},
-    descripcion:{type: Sequelize.STRING, allowNull:false},
-    ciudad: {type: Sequelize.STRING, allowNull:false},
-    logo: {type: Sequelize.STRING, allowNull:true},
+    description:{type: Sequelize.STRING, allowNull:false},
+    city: {type: Sequelize.STRING, allowNull:false},
     rfc: {type: Sequelize.STRING(32), allowNull:false},
-    giro: {type: Sequelize.STRING, allowNull:false},
-    razonSocial: {type: Sequelize.STRING(32), allowNull:false},
+    activity: {type: Sequelize.STRING, allowNull:false},
+    business_name: {type: Sequelize.STRING(32), allowNull:false},
     email: {type: Sequelize.STRING(32), allowNull:false},
-    telefonoEmpresa: {type: Sequelize.STRING(32), allowNull:false},
-    sitioWeb: {type: Sequelize.STRING(32), allowNull:false},
-    fechaRegistro: {type: Sequelize.DATEONLY,allowNull: true, defaultValue: Sequelize.NOW},
-    direccion: {type: Sequelize.STRING, allowNull:false},
-    colonia: {type: Sequelize.STRING, allowNull:false},
-    ciudad: {type: Sequelize.STRING(32), allowNull:false},
-    codigoPostal: {type: Sequelize.STRING(32), allowNull:false},
-    estado: {type: Sequelize.STRING(32), allowNull:false},
-    nombreReclutador: {type: Sequelize.STRING, allowNull:false},
-    emailReclutador: {type: Sequelize.STRING(32), allowNull:false},
-    telefonoReclutador:{type: Sequelize.STRING(32), allowNull:false},
-    usuario:{type: Sequelize.STRING(32), allowNull:true},
-    status:{type: Sequelize.INTEGER(1),allowNull: true, defaultValue: 2},
+    phone: {type: Sequelize.STRING(32), allowNull:false},
+    username:{type: Sequelize.STRING(32), allowNull:true},
+    web_page: {type: Sequelize.STRING(32), allowNull:false},
+    address: {type: Sequelize.STRING, allowNull:false},
+    colony: {type: Sequelize.STRING, allowNull:false},
+    city: {type: Sequelize.STRING(32), allowNull:false},
+    postal_code: {type: Sequelize.STRING(32), allowNull:false},
+    state: {type: Sequelize.STRING(32), allowNull:false},
+
+    recruiter_name: {type: Sequelize.STRING, allowNull:false},
+    recruiter_email: {type: Sequelize.STRING(32), allowNull:false},
+    recruiter_phone:{type: Sequelize.STRING(32), allowNull:false},
+
+    created_at: {type: Sequelize.DATEONLY,allowNull: true, defaultValue: Sequelize.NOW},
+    status:{type: Sequelize.ENUM('inRevision','accepted','rejected','deleted'),allowNull: false, defaultValue: 'inRevision'},
 })
 
-// Empresas.hasMany(Vacantes, {
-//     foreignKey: {
-//         name: 'empresaId',
-//         allowNull: true
-//     }
-// })
 Vacantes.belongsTo(Empresas, {
     foreignKey: {
-        name: 'empresaId',
+        name: 'empresa_id',
         allowNull: true
     }
 });

@@ -1,6 +1,6 @@
 
 module.exports = (req, res, next) => {
-	if (req.currentUser.type === "USER") {
+	if (req.userType === "company") {
 		next();
 	} else {
 		// Forbidden

@@ -1,15 +1,9 @@
-const express = require("express");
-
-const authRoute = require("./authRoute");
-const empresaRoute = require("./empresaRoute");
-const empresasRoute = require("./empresasRoute");
-const uploadsRoute = require("./uploadsRoute");
-const vacantesRoute = require("./vacantesRoute");
+const empresasRoutes = require("./empresasRoutes");
+const vacantesRoutes = require("./vacantesRoutes");
+const vinculadorRoutes = require("./vinculadorRoutes");
 
 module.exports = {
-	authRoute,
-	empresaRoute,
-	empresasRoute,
-	uploadsRoute,
-	vacantesRoute,
+	empresasRoutes,
+	vacantesRoutes,
+	vinculadorRoutes,
 };
