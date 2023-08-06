@@ -66,8 +66,9 @@ exports.changuePassword = async (req,res,next) => {
 
 // GET /empresas obtiene todas las empresas
 exports.getAll = async (req,res,next) => {
+  const {status} = req.query
     try {
-        const companies = await Empresas.findAll({ order: [['name', 'ASC']] });
+        const companies = await Empresas.findAll({ where:{status},order: [['name', 'ASC']] });
         return res.status(200).json({ companies });
       } catch (error) {
         console.log(error);
@@ -143,7 +144,7 @@ exports.put = async (req,res,next) => {
 // patch /empresas Edita el status de una empresa (solo a rejected,accepted,inRevision) 
 exports.patch = async (req,res,next) => {
     try {
-      const { status,password,username, } = req.body;
+      const { status,password,username } = req.body;
       const {id} = req.params
       const empresa = await Empresas.findOne({ where: { id } });
         // En caso de ser accepted se requiere un usuario y una contraseña
