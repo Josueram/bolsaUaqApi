@@ -1,4 +1,4 @@
-// POST /empresas/login Loggea a un vinculador
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 exports.login = async (req,res,next) => {
     try {
@@ -9,7 +9,7 @@ exports.login = async (req,res,next) => {
                 {
                   "user":"ADMIN",
                 },
-                'debugkey'
+                process.env.JWT_SECRET
               );
     
             return res.status(200).json({

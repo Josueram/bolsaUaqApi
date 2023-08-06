@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Empresas } = require("../models/");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
@@ -26,7 +27,7 @@ exports.login = async (req,res,next) => {
               "user":empresa.id,
               "userType":"company",
             },
-            'debugkey'
+            process.env.JWT_SECRET
           );
     
         return res.status(200).json({token});
