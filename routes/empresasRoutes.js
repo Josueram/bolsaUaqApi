@@ -11,11 +11,17 @@
 router.get("/login",
 	EmpresasController.login);
 
-/* Obtiene información sobre las empresas */
+/* Obtiene todas las empresas */
 router.get("/",
 	authorization,
-	EmpresasController.get);
- 
+	isAdmin,
+	EmpresasController.getAll);
+
+/* Obtiene información sobre las empresas */
+router.get("/:id",
+	authorization,
+	EmpresasController.getOne);
+
 /* Crea una empresa */
 router.post("/",
 	EmpresasController.post);

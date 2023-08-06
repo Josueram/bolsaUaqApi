@@ -7,7 +7,7 @@ exports.login = async (req,res,next) => {
     
             const token = jwt.sign(
                 {
-                  "user":"ADMIN",
+                  "userType":"admin",
                 },
                 process.env.JWT_SECRET
               );

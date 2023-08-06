@@ -40,44 +40,46 @@ exports.login = async (req,res,next) => {
 }
 
 
-// GET /empresas?id=number obtiene todas las empresas, si se le da una id obtiene una sola empresa
-// si una empresa logeada hace la solicitud obtiene solo lo de ella
-// si un vinculador logeado hace la solicitud puede obtener todo
-exports.get = async (req,res,next) => {
+// GET /empresas obtiene todas las empresas
+exports.getAll = async (req,res,next) => {
     try {
-        const { id } = req.query;
-        const { userType } = req;
-    
-        switch (userType) {
-          case 'admin':
-            if (typeof id === 'undefined') {
-                // obtiene todas las empresas
-                const companies = await Empresas.findAll({ order: [['name', 'ASC']] });
-                return res.status(200).json({ companies });
-            } else if (typeof id === 'number') {
-                // obtiene una empresa
-                const company = await Empresas.findOne({ where: { id } });
-                return res.status(200).json({ company });
-            }
-            break;
-    
-          case 'company':
-            const companyId = req.user;
-            if (companyId === id) {
-                // obtiene la informacion de una empresa logeada
-              const company = await Empresas.findOne({ where: { id } });
-              return res.status(200).json({ company });
-            } else {
-              return res.status(403).json({
-                message: 'No cuentas con los permisos necesarios.',
-              });
-            }
-        }
-    
+        const companies = await Empresas.findAll({ order: [['name', 'ASC']] });
+        return res.status(200).json({ companies });
       } catch (error) {
         console.log(error);
         return res.status(500).json({ message: 'Error del servidor' });
       }
+}
+
+
+// GET /empresas obtiene una empresa
+exports.getOne = async (req,res,next) => {
+  try {
+      const { id } = req.params;
+      const { userType } = req;
+  
+      switch (userType) {
+        case 'admin':
+            // obtiene la informacion de una empresa 
+          const company = await Empresas.findOne({ where: { id } });
+          return res.status(200).json({ company });
+        case 'company':
+          const companyId = req.user;
+          if (companyId === id) {
+            // obtiene la informacion de una empresa logeada
+            const company = await Empresas.findOne({ where: { id } });
+            return res.status(200).json({ company });
+          } else {
+            return res.status(403).json({
+              message: 'No cuentas con los permisos necesarios.',
+            });
+          }
+      }
+  
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({ message: 'Error del servidor' });
+    }
 }
 
 

@@ -1,22 +1,18 @@
 const jwt = require('jsonwebtoken');
+require("dotenv").config();
 
 module.exports = (req, res, next) => {
 
-    console.log('---------------')
     if (!req.headers.authorization) {
         return res.status(403).json({
             message: 'No cuentas con los permisios necesarios.'
         });
     }
 
-    const token = req.headers.authorization.split(' ')[1];
+    const token = req.headers.authorization
 
-    // console.log(token)
     try {
-        // const payload = jwt.verify(token, process.env.JWT_SECRET);
-        // const payload = jwt.verify(token, 'debugkey');
-        // req.user = payload; // Guarda los datos de la sesión
-        const decoded = jwt.verify(token, 'debugkey');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded.user;
         req.userType = decoded.userType;
         next();
