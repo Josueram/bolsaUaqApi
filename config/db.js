@@ -1,11 +1,12 @@
+require("dotenv").config();
 const Sequelize = require('sequelize');
 
 const db = new Sequelize({
-    host: 'us-cdbr-east-06.cleardb.net',
+    host: process.env.DB_HOST,
     dialect: 'mysql',
-    username: 'b6e3e3f0bb497c',
-    password: 'd8c95657',
-    database: 'heroku_6a07c725fd6a825',
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB,
     //port: 3306,
     define: {
         timestamps: false
