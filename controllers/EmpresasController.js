@@ -39,6 +39,30 @@ exports.login = async (req,res,next) => {
     }
 }
 
+// GET /changuePassword cambia la contraseña de la empresa logeada
+exports.changuePassword = async (req,res,next) => {
+  try {
+    const {actualPassword,newPassword} = req.body
+    const empresaId = req.user
+    const empresa = await Empresas.findOne({where:{id:empresaId}})
+    const hashPassword = await bcrypt.compare(actualPassword, empresa.dataValues.password)
+
+    if (!hashPassword) {
+        return res.status(500).json({
+            message: "Contraseña incorrecta"
+        });
+    }
+    const hash = await bcrypt.hash(newPassword, 10)
+    empresa.password = hash;
+    await empresa.save()
+
+    return res.status(200).json({ message: `Contraseña cambiada exitosamente` });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'Error del servidor' });
+  }
+}
 
 // GET /empresas obtiene todas las empresas
 exports.getAll = async (req,res,next) => {
@@ -97,7 +121,7 @@ exports.post = async (req,res,next) => {
     }
 }
 
-// PUT /empresas Edita completamente una empresa
+// PUT /empresas Edita completamente una empresa logeada
 exports.put = async (req,res,next) => {
     try {
       const data = req.body
@@ -116,31 +140,12 @@ exports.put = async (req,res,next) => {
     }
 }
 
-// PUT /empresas Edita el status de una empresa (solo a rejected,accepted,inRevision) o cambia su contraseña
-// si una empresa logeada hace la solicitud no puede cambiar el status
+// patch /empresas Edita el status de una empresa (solo a rejected,accepted,inRevision) 
 exports.patch = async (req,res,next) => {
     try {
-      const { status, id,password,username,actualPassword,newPassword } = req.body;
-      // No mando el status lo que significa que esta cambiando la contraseña
-      if(typeof status == 'undefined'){
-        const empresaId = req.user
-        const empresa = await Empresas.findOne({where:{id:empresaId}})
-        const hashPassword = await bcrypt.compare(actualPassword, empresa.dataValues.password)
-
-        if (!hashPassword) {
-            return res.status(500).json({
-                message: "Contraseña incorrecta"
-            });
-        }
-        const hash = await bcrypt.hash(newPassword, 10)
-        empresa.password = hash;
-        await empresa.save()
-
-        return res.status(200).json({ message: `Contraseña cambiada exitosamente` });
-
-      }else {
-        const empresa = await Empresas.findOne({ where: { empresaId: id } });
-
+      const { status,password,username, } = req.body;
+      const {id} = req.params
+      const empresa = await Empresas.findOne({ where: { id } });
         // En caso de ser accepted se requiere un usuario y una contraseña
         if(status=='accepted'){
           empresa.username = username;
@@ -154,8 +159,6 @@ exports.patch = async (req,res,next) => {
         return res.status(200).json({
             message: "Estatus de la empresa actualizada correctamente.",
         });
-      }
-
     } catch (error) {
         console.log(error)
         return res

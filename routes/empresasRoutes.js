@@ -11,6 +11,10 @@
 router.get("/login",
 	EmpresasController.login);
 
+/* Loggea a una empresa */
+router.get("/changue-password",
+	EmpresasController.changuePassword);
+
 /* Obtiene todas las empresas */
 router.get("/",
 	authorization,
@@ -27,18 +31,18 @@ router.post("/",
 	EmpresasController.post);
 
 /* Edita completamente una empresa */
-router.put("/",
+router.put("/:id",
 	authorization,
 	isUser,
 	EmpresasController.put);
 
 /* Edita un solo campo de una empresa */
-router.patch("/",
+router.patch("/:id",
 	authorization,
 	EmpresasController.patch);
 
 /* Cambia el status de una empresa a 'deleted' */
-router.delete("/",
+router.delete("/:id",
 	authorization,
 	isAdmin,
 	EmpresasController.delete);
