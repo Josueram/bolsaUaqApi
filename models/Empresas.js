@@ -21,7 +21,6 @@ const Empresas = db.define('empresas', {
     web_page: {type: Sequelize.STRING(32), allowNull:false},
     address: {type: Sequelize.STRING, allowNull:false},
     colony: {type: Sequelize.STRING, allowNull:false},
-    city: {type: Sequelize.STRING(32), allowNull:false},
     postal_code: {type: Sequelize.STRING(32), allowNull:false},
     state: {type: Sequelize.STRING(32), allowNull:false},
 

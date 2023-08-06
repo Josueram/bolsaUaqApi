@@ -1,7 +1,8 @@
 // POST /empresas/login Loggea a un vinculador
+const jwt = require("jsonwebtoken");
 exports.login = async (req,res,next) => {
     try {
-        const { usuario, password } = req.body.data;
+        const { usuario, password } = req.body;
         if (usuario === "10949" && password === "10949.") {
     
             const token = jwt.sign(
@@ -12,7 +13,6 @@ exports.login = async (req,res,next) => {
               );
     
             return res.status(200).json({
-                ok: true,
                 message: token,
             });
     

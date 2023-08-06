@@ -1,5 +1,6 @@
 const { Empresas } = require("../models/");
-
+const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 // POST /empresas/login Loggea a una empresa
 exports.login = async (req,res,next) => {
     try {
@@ -82,6 +83,7 @@ exports.get = async (req,res,next) => {
 // POST /empresas crea una empresa
 exports.post = async (req,res,next) => {
     try {
+      const data = req.body
       await Empresas.create(data)
       return res.status(200).json({message: "Solicitud enviada correctamente y en espera de aprobación."
     });

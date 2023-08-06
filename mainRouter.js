@@ -14,8 +14,8 @@ const {
 
 const router = Router();
 
-router.use("vacantes", vacantesRoutes);
-router.use("empresas", empresasRoutes);
-router.use("vinculador", vinculadorRoutes);
+router.use("/vacantes", vacantesRoutes);
+router.use("/empresas", empresasRoutes);
+router.use("/vinculador", vinculadorRoutes);
 
 module.exports = router;

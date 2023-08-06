@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
 
+    console.log('---------------')
     if (!req.headers.authorization) {
         return res.status(403).json({
             message: 'No cuentas con los permisios necesarios.'
