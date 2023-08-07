@@ -8,7 +8,7 @@
  const router = Router();
  
 /* Loggea a una empresa */
-router.get("/login",
+router.post("/login",
 	EmpresasController.login);
 
 /* Loggea a una empresa */
