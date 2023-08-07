@@ -2,11 +2,12 @@ require("dotenv").config();
 const { Empresas } = require("../models/");
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
+
 // POST /empresas/login Loggea a una empresa
 exports.login = async (req,res,next) => {
     try {
         const { username, password } = req.body;
-        const empresa = await Empresas.findOne({ where: { username: username, status:0 } });
+        const empresa = await Empresas.findOne({ where: { username: username, status:'accepted' } });
         
         if (!empresa) {
             return res.status(400).json({
