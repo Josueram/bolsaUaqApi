@@ -7,10 +7,15 @@ const { authorization, isAdmin, isUser } = require("../middlewares");
 
 const router = Router();
 
-/* Obtiene información sobre las vacantes */
+/* Obtiene todas las vacantes */
 router.get("/",
 	authorization,
-	VacantesController.get);
+	VacantesController.getAll);
+
+/* Obtiene una vacante */
+router.get("/:id",
+	authorization,
+	VacantesController.getOne);
 
 /* Obtiene el pdf de una vacante */
 router.get("/pdf/:id",

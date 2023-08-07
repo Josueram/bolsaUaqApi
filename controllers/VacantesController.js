@@ -4,7 +4,7 @@ const { pdfService } = require("../services/");
 // GET /vacantes?id=number obtiene todas las vacantes, si se le da una id obtiene una sola vacante
 // si una empresa logeada hace la solicitud obtiene solo lo de ella
 // si un vinculador logeado hace la solicitud puede obtener todo
-exports.get = async (req,res,next) => {
+exports.getAll = async (req,res,next) => {
     try {
         const { id } = req.query;
         const { userType } = req;
@@ -57,22 +57,75 @@ exports.get = async (req,res,next) => {
     }
 }
 
+// GET /vacantes?status('inRevision','accepted','rejected','deleted') 
+// Si es admin el token, devuelve todas las vacantes
+// Si es empresa el token, devuelve todas las vacantes de esa empresa
+exports.getAll = async (req,res,next) => {
+    try {
+        const {status} = req.query
+        const { userType } = req;
+    
+        switch (userType) {
+          case 'admin':
+                // obtiene todas las vacantes
+                const vacantes = await Vacantes.findAll({
+                where:{status},
+                include: [{ model: Empresas, attributes: ['name'] }],
+                order: [
+                        ['disponibility','ASC'],
+                        [Empresas, 'name', 'ASC'],
+                    ]
+                });
+                return res.status(200).json({ vacantes });
+            case 'company':
+                const companyId = req.user;
+                const vacants = await Vacantes.findAll({
+                    where:{status,id:companyId},
+                    include: [{ model: Empresas, attributes: ['name'] }],
+                    order: [
+                        ['disponibility','ASC'],
+                        [Empresas, 'name', 'ASC'],
+                    ]
+                });
+                return res.status(200).json({ vacants });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Error del servidor' });
+    }
+}
+  
+  
+// GET /vacantes/:id obtiene una vacante
+exports.getOne = async (req,res,next) => {
+    try {
+        const { id } = req.params;
+        const vacante = await Vacantes.findOne(
+            { where: { id }, include: [{ model: Empresas, attributes: ['name'] }] }
+        );
+        return res.status(200).json({ vacante });
+      } catch (error) {
+        console.log(error);
+        return res.status(500).json({ message: 'Error del servidor' });
+      }
+}
+
 // GET /vacantes/pdf/:id genera y manda el pdf del id de la vacante dada
 exports.getPdf = async (req,res,next) => {
     try {
         const { id } = req.params;
         const vacante = await Vacantes.findOne(
-            { where: { vacanteId: id }, include: [{ model: Empresas, attributes: ['name','city','address','recruiter_email'] }] }
+            { where: { id: id }, include: [{ model: Empresas, attributes: ['name','city','address','recruiter_email'] }] }
         );
-
+        let parsedVacante = vacante.dataValues
         const stream = res.writeHead(200, {
             'Content-Type': 'application/pdf',
-            'Content-Disposition': `attachment;filename=${vacante.name}.pdf`
+            'Content-Disposition': `attachment;filename=${parsedVacante.name}.pdf`
         });
         pdfService.buildPDF(
             (chunk) => stream.write(chunk),
             () => stream.end(),
-            vacante
+            parsedVacante
         )
     } catch (error) {
         console.log(error)
@@ -87,7 +140,7 @@ exports.post = async (req,res,next) => {
     try {
         let data = req.body;
         const  empresaId  = req.user;
-        data.empresaId = empresaId;
+        data.empresa_id = empresaId;
         await Vacantes.create(data);
 
         return res.status(200).json({

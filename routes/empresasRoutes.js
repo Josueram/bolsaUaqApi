@@ -11,8 +11,8 @@
 router.post("/login",
 	EmpresasController.login);
 
-/* Loggea a una empresa */
-router.get("/changue-password",
+/* Cambia la contraseña */
+router.post("/changue-password",
 	EmpresasController.changuePassword);
 
 /* Obtiene todas las empresas */
@@ -21,7 +21,7 @@ router.get("/",
 	isAdmin,
 	EmpresasController.getAll);
 
-/* Obtiene información sobre las empresas */
+/* Obtiene una empresa */
 router.get("/:id",
 	authorization,
 	EmpresasController.getOne);

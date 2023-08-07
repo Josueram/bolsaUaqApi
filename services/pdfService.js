@@ -1,7 +1,7 @@
 const PDFDocument = require('pdfkit');
 
 async function buildPDF(dataCallback, endCallback, data) {
-
+  console.log(data)
   // Create a document
   const doc = new PDFDocument({ size: 'LEGAL' });
   doc.on('data', dataCallback);
@@ -77,7 +77,7 @@ async function buildPDF(dataCallback, endCallback, data) {
   doc.moveDown(1);
 
   doc.fontSize(12).font('Helvetica-Bold').text("Descripción del empleo:", 74)
-description
+
   doc.fontSize(12).font('Helvetica').text(data.description, 74)
 
   doc.moveDown(1);

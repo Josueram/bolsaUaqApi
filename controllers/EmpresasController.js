@@ -65,7 +65,7 @@ exports.changuePassword = async (req,res,next) => {
   }
 }
 
-// GET /empresas obtiene todas las empresas
+// GET /empresas?status('inRevision','accepted','rejected','deleted') obtiene todas las empresas
 exports.getAll = async (req,res,next) => {
   const {status} = req.query
     try {
@@ -76,7 +76,6 @@ exports.getAll = async (req,res,next) => {
         return res.status(500).json({ message: 'Error del servidor' });
       }
 }
-
 
 // GET /empresas obtiene una empresa
 exports.getOne = async (req,res,next) => {
