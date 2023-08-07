@@ -23,6 +23,7 @@ const Vacantes = db.define('vacantes', {
     place: {type: Sequelize.STRING, allowNull:false},
     english_level: {type: Sequelize.STRING(32), allowNull:false},
     salary: {type: Sequelize.STRING(32), allowNull:false},
+    
     state: {type: Sequelize.STRING, allowNull:false},
     area: {type: Sequelize.STRING(32), allowNull:false},
     number_of_vacants: {type: Sequelize.STRING(32), allowNull:false},

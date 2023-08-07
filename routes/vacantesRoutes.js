@@ -20,6 +20,7 @@ router.get("/pdf/:id",
 
 /* Crea una vacante */
 router.post("/",
+   authorization,
 	isUser,
 	VacantesController.post);
 
